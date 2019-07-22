@@ -94,4 +94,4 @@ HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 #LOGGING
 LOG_FILE = 'data/logs/arts_spider.log'
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'INFO'
