@@ -20,12 +20,14 @@ class BerlingskeScraper(scrapy.Spider):
         self.scraped_urls = set()
         try:
             with open('data/arts.jl', mode='r') as reader:
-                for line in reader.readlines():
+                lines = reader.readlines()
+                self.logger.info('Total JSONlines: {}'.format(len(lines)))
+                for line in lines:
                     dic = json.loads(line)
                     url = dic['url'][0]
-                    self.scraped_urls.add(url[0])
+                    self.scraped_urls.add(url)
         except FileNotFoundError:
-            pass
+            self.logger.info('data/arts.jl not found')
         self.logger.info('Found {} scraped pages.'.format(len(self.scraped_urls)))
 
         for url in urls:
