@@ -17,7 +17,7 @@ class ArtscraperPipeline(object):
             spider.logger.info("Duplicate ({}) on item: {}".format(url, item['url']))
             raise DropItem()
         else:
-            spider.scraped_urls.add(hsh)
+            spider.scraped_urls.add(url)
             return item
 
 
