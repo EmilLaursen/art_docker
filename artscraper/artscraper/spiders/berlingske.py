@@ -14,8 +14,13 @@ class BerlingskeScraper(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            'https://www.berlingske.dk/business'
+            'https://www.berlingske.dk/business',
+            'https://www.berlingske.dk/nyheder',
+            'https://www.berlingske.dk/opinion',
+            'https://www.berlingske.dk/aok',
         ]
+
+        
         self.scraped_url_hashes = set()
         try:
             with open('data/arts.jl', mode='r') as reader:

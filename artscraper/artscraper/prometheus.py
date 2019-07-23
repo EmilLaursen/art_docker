@@ -19,6 +19,7 @@ class WebService(Site):
     def __init__(self, crawler):
         if not crawler.settings.getbool('PROMETHEUS_ENABLED', True):
             raise NotConfigured
+        
         self.tasks = []
         self.stats = crawler.stats
         self.crawler = crawler
@@ -132,7 +133,7 @@ class WebService(Site):
         self.spr_response_received.labels(spider=self.name).inc()
 
     def item_dropped(self, item, spider, exception):
-        self.spr_item_scraped.labels(spider=self.name).inc()
+        self.spr_item_dropped.labels(spider=self.name).inc()
 
     def update(self):
         logging.debug(self.stats.get_stats())
