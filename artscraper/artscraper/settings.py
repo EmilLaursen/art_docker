@@ -9,6 +9,8 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
+import artscraper.prometheus
+
 BOT_NAME = 'artscraper'
 
 SPIDER_MODULES = ['artscraper.spiders']
@@ -34,7 +36,7 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 1
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-COOKIES_ENABLED = True
+COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -59,9 +61,10 @@ COOKIES_ENABLED = True
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
+EXTENSIONS = {
 #    'scrapy.extensions.telnet.TelnetConsole': None,
-#}
+    'artscraper.prometheus.WebService': 500,
+}
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
@@ -84,13 +87,13 @@ ITEM_PIPELINES = {
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-HTTPCACHE_ENABLED = True
-HTTPCACHE_EXPIRATION_SECS = 0
-HTTPCACHE_DIR = 'data/httpcache'
-HTTPCACHE_IGNORE_HTTP_CODES = [] # status codes to ignore. Default.
-HTTPCACHE_IGNORE_SCHEMES = ['https://www.berlingske.dk/business']
-HTTPCACHE_GZIP = True
-HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+#HTTPCACHE_ENABLED = True
+#HTTPCACHE_EXPIRATION_SECS = 0
+#HTTPCACHE_DIR = 'data/httpcache'
+#HTTPCACHE_IGNORE_HTTP_CODES = [] # status codes to ignore. Default.
+#HTTPCACHE_IGNORE_SCHEMES = ['https://www.berlingske.dk/business']
+#HTTPCACHE_GZIP = True
+#HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 
 #LOGGING
@@ -98,11 +101,16 @@ LOG_FILE = 'data/logs/arts_spider.log'
 LOG_LEVEL = 'INFO'
 LOG_FORMATTER = 'artscraper.pipelines.PoliteLogFormatter' # Custom DropItem log handling.
 
-# Get dl stats. Not sure if useful or how to use.
-DOWNLOADER_STATS=True
-
 # Use depth first search order.
 DEPTH_PRIORITY = 1
 SCHEDULER_DISK_QUEUE = 'scrapy.squeues.PickleFifoDiskQueue'
 SCHEDULER_MEMORY_QUEUE = 'scrapy.squeues.FifoMemoryQueue'
 SCHEDULER_DEBUG = True
+
+
+# PROMETHEUS Module settings
+PROMETHEUS_ENABLED = True
+PROMETHEUS_PORT = [6080]
+PROMETHEUS_HOST = '0.0.0.0'
+PROMETHEUS_PATH = 'metrics'
+PROMETHEUS_UPDATE_INTERVAL = 20
