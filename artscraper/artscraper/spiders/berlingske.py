@@ -8,9 +8,6 @@ import logging
 class BerlingskeScraper(scrapy.Spider):
     name = 'arts'
     allowed_domains = ['berlingske.dk']
-    
-    def md5(self, string):
-        return hashlib.md5(string.encode('utf-8')).hexdigest()
 
     def start_requests(self):
         urls = [
@@ -20,18 +17,16 @@ class BerlingskeScraper(scrapy.Spider):
             'https://www.berlingske.dk/aok',
         ]
 
-        
-        self.scraped_url_hashes = set()
+        self.scraped_urls = set()
         try:
             with open('data/arts.jl', mode='r') as reader:
                 for line in reader.readlines():
                     dic = json.loads(line)
-                    url = dic.get('url', [])
-                    hsh = self.md5(url[0]) if not url else ""
-                    self.scraped_url_hashes.add(hsh)
+                    url = dic['url'][0]
+                    self.scraped_urls.add(url[0])
         except FileNotFoundError:
-            self.logger.info('JsonLines file not found.')
-        
+            pass
+        self.logger.info('Found {} scraped pages.'.format(len(self.scraped_urls)))
 
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
