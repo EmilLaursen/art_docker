@@ -87,7 +87,7 @@ ITEM_PIPELINES = {
 HTTPCACHE_ENABLED = True
 HTTPCACHE_EXPIRATION_SECS = 0
 HTTPCACHE_DIR = 'data/httpcache'
-HTTPCACHE_IGNORE_HTTP_CODES = []
+HTTPCACHE_IGNORE_HTTP_CODES = ['https://www.berlingske.dk/business']
 HTTPCACHE_GZIP = True
 HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
@@ -102,6 +102,6 @@ DOWNLOADER_STATS=True
 
 # Use depth first search order.
 DEPTH_PRIORITY = 1
-SCHEDULER_DISK_QUEUE = 'scrapy.squeue.PickleFifoDiskQueue'
-SCHEDULER_MEMORY_QUEUE = 'scrapy.squeue.FifoMemoryQueue'
+SCHEDULER_DISK_QUEUE = 'scrapy.squeues.PickleFifoDiskQueue'
+SCHEDULER_MEMORY_QUEUE = 'scrapy.squeues.FifoMemoryQueue'
 SCHEDULER_DEBUG = True
