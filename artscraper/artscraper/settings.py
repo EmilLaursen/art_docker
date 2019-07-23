@@ -87,7 +87,8 @@ ITEM_PIPELINES = {
 HTTPCACHE_ENABLED = True
 HTTPCACHE_EXPIRATION_SECS = 0
 HTTPCACHE_DIR = 'data/httpcache'
-HTTPCACHE_IGNORE_HTTP_CODES = ['https://www.berlingske.dk/business']
+HTTPCACHE_IGNORE_HTTP_CODES = [] # status codes to ignore. Default.
+HTTPCACHE_IGNORE_SCHEMES = ['https://www.berlingske.dk/business']
 HTTPCACHE_GZIP = True
 HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
