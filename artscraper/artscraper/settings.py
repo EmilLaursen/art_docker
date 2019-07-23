@@ -65,9 +65,9 @@ COOKIES_ENABLED = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'artscraper.pipelines.ArtscraperPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'artscraper.pipelines.ArtscraperPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -95,3 +95,13 @@ HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 #LOGGING
 LOG_FILE = 'data/logs/arts_spider.log'
 LOG_LEVEL = 'INFO'
+LOG_FORMATTER = 'artscraper.pipelines.PoliteLogFormatter' # Custom DropItem log handling.
+
+# Get dl stats. Not sure if useful or how to use.
+DOWNLOADER_STATS=True
+
+# Use depth first search order.
+DEPTH_PRIORITY = 1
+SCHEDULER_DISK_QUEUE = 'scrapy.squeue.PickleFifoDiskQueue'
+SCHEDULER_MEMORY_QUEUE = 'scrapy.squeue.FifoMemoryQueue'
+SCHEDULER_DEBUG = True
