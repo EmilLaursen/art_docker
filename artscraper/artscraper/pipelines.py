@@ -14,7 +14,7 @@ class ArtscraperPipeline(object):
     def process_item(self, item, spider):
         url = item['url'][0]
         if url in spider.scraped_urls:
-            spider.logger.info("Duplicate on item: {}".format(urlparse(item['url']).path))
+            spider.logger.info("Duplicate on item: {}".format(urlparse(url).path))
             raise DropItem()
         else:
             spider.scraped_urls.add(url)
