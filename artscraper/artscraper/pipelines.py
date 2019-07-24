@@ -8,13 +8,13 @@
 from scrapy.exceptions  import DropItem
 import logging
 from scrapy import logformatter
-
+from urllib.parse import urlparse
 
 class ArtscraperPipeline(object):
     def process_item(self, item, spider):
         url = item['url'][0]
         if url in spider.scraped_urls:
-            spider.logger.info("Duplicate on item: {}".format(item['url']))
+            spider.logger.info("Duplicate on item: {}".format(urlparse(item['url']).path)
             raise DropItem()
         else:
             spider.scraped_urls.add(url)

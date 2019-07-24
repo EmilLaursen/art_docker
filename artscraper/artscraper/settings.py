@@ -91,12 +91,6 @@ HTTPCACHE_ENABLED = True
 HTTPCACHE_EXPIRATION_SECS = 0
 HTTPCACHE_DIR = 'data/httpcache'
 HTTPCACHE_IGNORE_HTTP_CODES = [] # status codes to ignore. Default.
-HTTPCACHE_IGNORE_SCHEMES = [
-            'https://www.berlingske.dk/business',
-            'https://www.berlingske.dk/nyheder',
-            'https://www.berlingske.dk/opinion',
-            'https://www.berlingske.dk/aok',
-        ]
 HTTPCACHE_GZIP = True
 HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 

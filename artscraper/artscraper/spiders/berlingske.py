@@ -44,7 +44,6 @@ class BerlingskeScraper(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse, meta={'dont_cache': True})
     
     def parse(self, response):
-        self.logger.info('Parsing: {}'.format(response.url))
         l = ItemLoader(item=ArtscraperItem(), response=response)
         l.add_css('authors', '.article-byline__author-name::text')
         l.add_css('alt_authors', '.font-g1::text')
