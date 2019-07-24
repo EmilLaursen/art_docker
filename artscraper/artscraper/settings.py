@@ -25,14 +25,14 @@ USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) Safari/537.36'
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 1
+CONCURRENT_REQUESTS = 16
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 10
+DOWNLOAD_DELAY = 5
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 1
+CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
@@ -87,13 +87,18 @@ ITEM_PIPELINES = {
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-#HTTPCACHE_ENABLED = True
-#HTTPCACHE_EXPIRATION_SECS = 0
-#HTTPCACHE_DIR = 'data/httpcache'
-#HTTPCACHE_IGNORE_HTTP_CODES = [] # status codes to ignore. Default.
-#HTTPCACHE_IGNORE_SCHEMES = ['https://www.berlingske.dk/business']
-#HTTPCACHE_GZIP = True
-#HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+HTTPCACHE_ENABLED = True
+HTTPCACHE_EXPIRATION_SECS = 0
+HTTPCACHE_DIR = 'data/httpcache'
+HTTPCACHE_IGNORE_HTTP_CODES = [] # status codes to ignore. Default.
+HTTPCACHE_IGNORE_SCHEMES = [
+            'https://www.berlingske.dk/business',
+            'https://www.berlingske.dk/nyheder',
+            'https://www.berlingske.dk/opinion',
+            'https://www.berlingske.dk/aok',
+        ]
+HTTPCACHE_GZIP = True
+HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 
 #LOGGING

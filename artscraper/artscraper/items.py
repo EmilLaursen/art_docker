@@ -6,28 +6,28 @@
 # https://doc.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+from scrapy import Field
 from scrapy.loader.processors import MapCompose
-
-
 
 
 class ArtscraperItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    authors = scrapy.Field(
-        input_processor=MapCompose(str.strip)
+    filter_empty = lambda x: x if x else None
+    authors = Field(
+        input_processor=MapCompose(str.strip, filter_empty)
     )
-    section = scrapy.Field(
-        input_processor=MapCompose(str.strip)
+    section = Field(
+        input_processor=MapCompose(str.strip, filter_empty)
     )
-    alt_authors = scrapy.Field(
-        input_processor=MapCompose(str.strip)
+    alt_authors = Field(
+        input_processor=MapCompose(str.strip, filter_empty)
     )
-    date = scrapy.Field(
-        input_processor=MapCompose(str.strip)
+    date = Field(
+        input_processor=MapCompose(str.strip, filter_empty)
     )
-    url = scrapy.Field()
-    title = scrapy.Field()
-    sub_title = scrapy.Field()
-    body = scrapy.Field()
+    url = Field()
+    title = Field()
+    sub_title = Field()
+    body = Field()
 

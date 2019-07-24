@@ -17,11 +17,21 @@ class BerlingskeScraper(scrapy.Spider):
             'https://www.berlingske.dk/aok',
         ]
 
+        # Possible login code.
+        login_url = 'https://www.berlingske.dk/mine-sider/kundeservice#login'
+
+        #scrapy.FormRequest.from_response(
+        #    response,
+        #    formid='login_form'
+        #    formdata={'email' : 'email', : 'password' : 'password'},
+        #    clickdata={'class':'login-box__submit btn btn-primary order-sm-4 order-lg-3 submit'}
+        #    callback=self.after_login,
+        #)
+
         self.scraped_urls = set()
         try:
             with open('data/arts.jl', mode='r') as reader:
                 lines = reader.readlines()
-                self.logger.info('Total JSONlines: {}'.format(len(lines)))
                 for line in lines:
                     dic = json.loads(line)
                     url = dic['url'][0]
@@ -31,7 +41,7 @@ class BerlingskeScraper(scrapy.Spider):
         self.logger.info('Found {} scraped pages.'.format(len(self.scraped_urls)))
 
         for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+            yield scrapy.Request(url=url, callback=self.parse, meta={'dont_cache': True})
     
     def parse(self, response):
         self.logger.info('Parsing: {}'.format(response.url))
