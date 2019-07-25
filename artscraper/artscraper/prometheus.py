@@ -128,8 +128,7 @@ class WebService(Site):
                 else:
                     self.seen_stats[field] = Gauge(prefix + field, '', ['spider'])
             except ValueError as e:
-                print(self.seen_stats)
-                print('='*100)
-                print(defaults)
-                print(field)
+                logging.info(self.seen_stats)
+                logging.info(defaults)
+                logging.info(field)
                 raise e
