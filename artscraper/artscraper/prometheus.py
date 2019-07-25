@@ -8,6 +8,7 @@ from twisted.internet import task
 from scrapy.exceptions import NotConfigured
 from scrapy.utils.reactor import listen_tcp
 from scrapy import signals
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -119,7 +120,8 @@ class WebService(Site):
         for field, stat in self.stats.get_stats().items():
             if not isinstance(stat, int):
                 continue
-            field = field.replace('/', '_')
+            field = field.replace('/', '_').replace(' ', '_')
+            
             try:
                 gauge = self.seen_stats.get(field)
                 if gauge:
