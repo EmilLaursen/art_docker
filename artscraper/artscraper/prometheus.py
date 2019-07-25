@@ -120,15 +120,15 @@ class WebService(Site):
         for field, stat in self.stats.get_stats().items():
             if not isinstance(stat, int):
                 continue
-            field = re.sub(r'([^a-zA-Z0-9_:]+)', '_', field)
+            
             try:
+                field = re.sub(r'([^a-zA-Z0-9_:]+)', '_', field)
+                if not re.match(r'([a-zA-Z_:][a-zA-Z0-9_:]*)', prefix + field):
+                    raise ValueError('The gauge name {} does not conform to prometheus datamodel.'format(prefix + field))
                 gauge = self.seen_stats.get(field)
-                if gauge:
-                    gauge.labels(spider=self.name).set(stat)
-                else:
-                    self.seen_stats[field] = Gauge(prefix + field, '', ['spider'])
+                if not gauge:
+                    gauge = Gauge(prefix + field, '', ['spider'])    
+                gauge.labels(spider=self.name).set(stat)
+                self.seen_stats[field] = gauge
             except ValueError as e:
-                logging.info(self.seen_stats)
-                logging.info(defaults)
-                logging.info(field)
                 raise e
