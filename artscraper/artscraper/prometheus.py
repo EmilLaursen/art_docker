@@ -45,7 +45,7 @@ defaults = [
     'scheduler/enqueued',
     'scheduler/enqueued/memory',
 ]
-defaults = [d.replace('/', '_') for d in defaults]
+defaults = [re.sub(r'([^a-zA-Z0-9_:]+)', '_', d) for d in defaults]
 
 class WebService(Site):
     """
@@ -120,8 +120,7 @@ class WebService(Site):
         for field, stat in self.stats.get_stats().items():
             if not isinstance(stat, int):
                 continue
-            field = field.replace('/', '_').replace(' ', '_')
-            
+            field = re.sub(r'([^a-zA-Z0-9_:]+)', '_', field)
             try:
                 gauge = self.seen_stats.get(field)
                 if gauge:
@@ -132,4 +131,5 @@ class WebService(Site):
                 print(self.seen_stats)
                 print('='*100)
                 print(defaults)
+                print(field)
                 raise e
