@@ -11,6 +11,40 @@ from scrapy import signals
 
 logger = logging.getLogger(__name__)
 
+prefix = 'spr_'
+
+defaults = [
+    'downloader/request_bytes',
+    'downloader/request_count',
+    'downloader/request_method_count/GET',
+    'downloader/response_bytes',
+    'downloader/response_count',
+    'downloader/response_status_count/200',
+    'dupefilter/filtered',
+    'elapsed_time_seconds',
+    'httpcache/firsthand',
+    'httpcache/hit',
+    'httpcache/miss',
+    'httpcache/store',
+    'item_dropped_count',
+    'item_dropped_reasons_count/DropItem',
+    'item_scraped_count',
+    'log_count/INFO',
+    'memusage/max',
+    'memusage/startup',
+    'offsite/domain',
+    'offsite/filtered',
+    'request_depth_max',
+    'response_received_count',
+    'robotstxt/request_count',
+    'robotstxt/response_count',
+    'robotstxt/response_status_count/200',
+    'scheduler/dequeued',
+    'scheduler/dequeued/memory',
+    'scheduler/enqueued',
+    'scheduler/enqueued/memory',
+]
+defaults = [d.replace('/', '_') for d in defaults]
 
 class WebService(Site):
     """
@@ -29,59 +63,16 @@ class WebService(Site):
         self.path = crawler.settings.get('PROMETHEUS_PATH', 'metrics')
         self.interval = crawler.settings.get('PROMETHEUS_UPDATE_INTERVAL', 30)
 
-        self.spr_item_scraped = Gauge(
-            'spr_items_scraped', 'Spider items scraped', ['spider'])
-        self.spr_item_dropped = Gauge(
-            'spr_items_dropped', 'Spider items dropped', ['spider'])
-        self.spr_response_received = Gauge(
-            'spr_response_received', 'Spider responses received', ['spider'])
+        self.seen_stats = {}
+        for default in defaults:
+            g = Gauge(prefix + default, '', ['spider'])
+            g.labels(spider=self.name).set(0)
+            self.seen_stats[default] = g    
+        
+        # Global (non-spider level specific) stats     
         self.spr_opened = Gauge('spr_opened', 'Spider opened', ['spider'])
         self.spr_closed = Gauge(
             'spr_closed', 'Spider closed', ['spider', 'reason'])
-
-        self.spr_downloader_request_bytes = Gauge(
-            'spr_downloader_request_bytes', '...', ['spider'])
-        self.spr_downloader_request_total = Gauge(
-            'spr_downloader_request_total', '...', ['spider'])
-        self.spr_downloader_request_count = Gauge(
-            'spr_downloader_request', '...', ['spider', 'method'])
-        self.spr_downloader_response_count = Gauge(
-            'spr_downloader_response', '...', ['spider'])
-        self.spr_downloader_response_bytes = Gauge(
-            'spr_downloader_response_bytes', '...', ['spider'])
-        self.spr_downloader_response_status_count = Gauge(
-            'spr_downloader_response_status', '...', ['spider', 'code'])
-
-        self.spr_log_count = Gauge('spr_log', '...', ['spider', 'level'])
-
-        self.spr_duplicate_filtered = Gauge(
-            'spr_duplicate_filtered', '...', ['spider'])
-
-        self.spr_memdebug_gc_garbage_count = Gauge(
-            'spr_memdebug_gc_garbage', '...', ['spider'])
-        self.spr_memdebug_live_refs = Gauge(
-            'spr_memdebug_live_refs', '...', ['spider'])
-        self.spr_memusage_max = Gauge(
-            'spr_memusage_max', '...', ['spider'])
-        self.spr_memusage_startup = Gauge(
-            'spr_memusage_startup', '...', ['spider'])
-
-        self.spr_scheduler_dequeued = Gauge(
-            'spr_scheduler_dequeued', '...', ['spider'])
-        self.spr_scheduler_enqueued = Gauge(
-            'spr_scheduler_enqueued', '...', ['spider'])
-        self.spr_scheduler_enqueued_memory = Gauge(
-            'spr_scheduler_enqueued_memory', '...', ['spider'])
-
-        self.spr_offsite_domains_count = Gauge(
-            'spr_offsite_domains', '...', ['spider'])
-        self.spr_offsite_filtered_count = Gauge(
-            'spr_offsite_filtered', '...', ['spider'])
-
-        self.spr_request_depth = Gauge(
-            'spr_request_depth', '...', ['spider'])
-        self.spr_request_depth_max = Gauge(
-            'spr_request_depth_max', '...', ['spider'])
 
         root = resource.Resource()
         self.promtheus = None
@@ -93,10 +84,6 @@ class WebService(Site):
 
         crawler.signals.connect(self.spider_opened, signals.spider_opened)
         crawler.signals.connect(self.spider_closed, signals.spider_closed)
-        crawler.signals.connect(self.item_scraped, signals.item_scraped)
-        crawler.signals.connect(self.item_dropped, signals.item_dropped)
-        crawler.signals.connect(self.response_received,
-                                signals.response_received)
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -126,130 +113,21 @@ class WebService(Site):
     def spider_closed(self, spider, reason):
         self.spr_closed.labels(spider=self.name, reason=reason).inc()
 
-    def item_scraped(self, item, spider):
-        self.spr_item_scraped.labels(spider=self.name).inc()
-
-    def response_received(self, spider):
-        self.spr_response_received.labels(spider=self.name).inc()
-
-    def item_dropped(self, item, spider, exception):
-        self.spr_item_dropped.labels(spider=self.name).inc()
-
     def update(self):
-        logging.debug(self.stats.get_stats())
+        logging.debug('prometheus.update stats: {}'.format(self.stats.get_stats()))
 
-        # Downloader Request Stats
-        self.request_stats()
-
-        # Downloader Request Stats
-        self.response_stats()
-
-        # Logging Stats
-        self.logging_stats()
-
-        # Memory Debug Stats
-        self.memory_debug_stats()
-
-        # Memory Usage Stats
-        self.memory_usage_stats()
-
-        # Scheduler Stats
-        self.scheduler_stats()
-
-        # Off-Site Filtering Stats
-        self.offsite_stats()
-
-        # Duplicate Stats
-        self.duplicate_filter_stats()
-
-        # Request Depth
-        self.request_depth()
-
-    def request_depth(self):
-        depth = self.stats.get_value('request_depth_max', 0)
-        self.spr_request_depth_max.labels(spider=self.name).set(depth)
-        for i in range(depth):
-            stat = 'request_depth_count/{}'.format(i)
-            depthv = self.stats.get_value(stat, 0)
-            self.spr_request_depth.labels(spider=self.name).set(depthv)
-
-    def duplicate_filter_stats(self):
-        dup = self.stats.get_value('dupefilter/filtered', 0)
-        self.spr_duplicate_filtered.labels(spider=self.name).set(dup)
-
-    def memory_debug_stats(self):
-        mdgc_count = self.stats.get_value('memdebug/gc_garbage_count', 0)
-        self.spr_memdebug_gc_garbage_count.labels(
-            spider=self.name).set(mdgc_count)
-
-        mdlr_count = self.stats.get_value('memdebug/live_refs/MySpider', 0)
-        self.spr_memdebug_live_refs.labels(
-            spider=self.name).set(mdlr_count)
-
-    def memory_usage_stats(self):
-        mum_count = self.stats.get_value('memusage/max', 0)
-        self.spr_memusage_max.labels(spider=self.name).set(mum_count)
-
-        mus_count = self.stats.get_value('memusage/startup', 0)
-        self.spr_memusage_startup.labels(spider=self.name).set(mus_count)
-
-    def scheduler_stats(self):
-        dequeued = self.stats.get_value('scheduler/dequeued', 0)
-        self.spr_scheduler_dequeued.labels(spider=self.name).set(dequeued)
-
-        enqueued = self.stats.get_value('scheduler/enqueued', 0)
-        self.spr_scheduler_enqueued.labels(spider=self.name).set(enqueued)
-
-        enqueued_mem = self.stats.get_value('scheduler/enqueued/memory', 0)
-        self.spr_scheduler_enqueued_memory.labels(
-            spider=self.name).set(enqueued_mem)
-
-        dequeued_mem = self.stats.get_value('scheduler/dequeued/memory', 0)
-        self.spr_scheduler_enqueued_memory.labels(
-            spider=self.name).set(dequeued_mem)
-
-    def offsite_stats(self):
-        od_count = self.stats.get_value('offsite/domains', 0)
-        self.spr_offsite_domains_count.labels(
-            spider=self.name).set(od_count)
-
-        of_count = self.stats.get_value('offsite/filtered', 0)
-        self.spr_offsite_filtered_count.labels(
-            spider=self.name).set(of_count)
-        
-    def request_stats(self):
-        for i in ['GET', 'PUT', 'DELETE', 'POST']:
-            stat = 'downloader/request_method_count/{}'.format(i)
-            count = self.stats.get_value(stat, 0)
-            if count > 0:
-                self.spr_downloader_request_count.labels(
-                    spider=self.name, method=i).set(count)
-
-        total_count = self.stats.get_value('downloader/request_count', 0)
-        self.spr_downloader_request_total.labels(
-            spider=self.name).set(total_count)
-
-        request_bytes = self.stats.get_value('downloader/request_bytes', 0)
-        self.spr_downloader_request_bytes.labels(
-            spider=self.name).set(request_bytes)
-
-    def response_stats(self):
-        response_count = self.stats.get_value('downloader/response_count', 0)
-        self.spr_downloader_response_count.labels(
-            spider=self.name).set(response_count)
-
-        for i in ['200', '404', '500']:
-            stat = 'downloader/response_status_count/{}'.format(i)
-            status = self.stats.get_value(stat, 0)
-            self.spr_downloader_response_status_count.labels(
-                spider=self.name, code=i).set(status)
-
-        response_bytes = self.stats.get_value('downloader/response_bytes', 0)
-        self.spr_downloader_response_bytes.labels(
-            spider=self.name).set(response_bytes)
-
-    def logging_stats(self):
-        for i in ['DEBUG', 'ERROR', 'INFO', 'CRITICAL', 'WARNING']:
-            level = self.stats.get_value('log_count/{}'.format(i), 0)
-            self.spr_log_count.labels(
-                spider=self.name, level=i).set(level)
+        for field, stat in self.stats.get_stats().items():
+            if not isinstance(stat, int):
+                continue
+            field = field.replace('/', '_')
+            try:
+                gauge = self.seen_stats.get(field)
+                if gauge:
+                    gauge.labels(spider=self.name).set(stat)
+                else:
+                    self.seen_stats[field] = Gauge(prefix + field, '', ['spider'])
+            except ValueError as e:
+                print(self.seen_stats)
+                print('='*100)
+                print(defaults)
+                raise e

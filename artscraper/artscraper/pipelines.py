@@ -28,6 +28,6 @@ class PoliteLogFormatter(logformatter.LogFormatter):
             'msg': logformatter.DROPPEDMSG,
             'args': {
                 'exception': exception,
-                'item': item,
+                'item': item.get('url', ''),
             }
         }
