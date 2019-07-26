@@ -1,6 +1,7 @@
 default: build
 
 build:
+	git pull
 	docker build -t artscraper:latest $(HOME)/repos/art_docker/artscraper
 	docker tag artscraper:latest emillime/artscraper:latest
 	docker login
