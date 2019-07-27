@@ -26,8 +26,13 @@ class ArtscraperItem(scrapy.Item):
     date = Field(
         input_processor=MapCompose(str.strip, filter_empty)
     )
+    sub_title = Field(
+        input_processor=MapCompose(str.strip, filter_empty)
+    )
+    title = Field(
+        input_processor=MapCompose(str.strip, filter_empty)
+    )
+    paywall = Field()
     url = Field()
-    title = Field()
-    sub_title = Field()
     body = Field()
-
+    scrape_date = Field()
