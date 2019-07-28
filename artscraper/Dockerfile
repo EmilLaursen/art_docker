@@ -15,4 +15,4 @@ VOLUME /data
 
 EXPOSE 6080
 
-CMD /artscraper/crawl_master.py
+CMD ./crawl_master.py
