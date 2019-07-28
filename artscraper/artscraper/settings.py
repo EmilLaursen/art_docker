@@ -30,7 +30,7 @@ CONCURRENT_REQUESTS = 16
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 0.40
+DOWNLOAD_DELAY = 2
 # The download delay setting will honor only one of:
 CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -120,7 +120,7 @@ FEED_URI = Path.cwd().as_uri() + '/data/%(name)s.jl'
 FEED_FORMAT = 'jsonlines'
 
 # STOPPING CONDITION
-CLOSESPIDER_TIMEOUT = 3600 # seconds. This is 1 hours.
-CLOSESPIDER_ITEMCOUNT = 2000
+CLOSESPIDER_TIMEOUT = 60*2 # seconds. This is 1 hours.
+CLOSESPIDER_ITEMCOUNT = 1337*3
 CLOSESPIDER_PAGECOUNT = 0
 CLOSESPIDER_ERRORCOUNT = 0
