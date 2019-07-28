@@ -15,4 +15,4 @@ VOLUME /data
 
 EXPOSE 6080
 
-CMD scrapy crawl drspider
+CMD /artscraper/crawl_master.py
