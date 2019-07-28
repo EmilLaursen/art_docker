@@ -15,4 +15,4 @@ VOLUME /data
 
 EXPOSE 6080
 
-CMD scrapy crawl arts
+CMD scrapy crawl drspider
