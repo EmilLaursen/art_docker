@@ -5,7 +5,7 @@ from scrapy.loader import ItemLoader
 import json
 from datetime import datetime
 from itertools import chain
-
+from pathlib import Path
 
 from scrapy.spiders import SitemapSpider
 
@@ -15,15 +15,10 @@ class DrSpider(SitemapSpider):
         'https://www.dr.dk/sitemap.dr.dk3.xml',
         'https://www.dr.dk/sitemap.dr.dk.xml',
         'https://www.dr.dk/sitemap.dr.dk1.xml',
-        #'https://www.dr.dk/sitemap.dr.dk2.xml',  This gives an error in the 
-        #'https://www.dr.dk/sitemapindex.xml',
     ]
     sitemap_follow = ['/sitemap.dr']
 
     custom_settings = {
-        'CONCURRENT_REQUESTS': 16,
-        'DOWNLOAD_DELAY': 0.75,
-        'CONCURRENT_REQUESTS_PER_DOMAIN': 16,
         'AUTOTHROTTLE_ENABLED': True,
         'AUTOTHROTTLE_START_DELAY': 2,
         # The maximum download delay to be set in case of high latencies
@@ -33,9 +28,10 @@ class DrSpider(SitemapSpider):
         'AUTOTHROTTLE_TARGET_CONCURRENCY': 4.0,
         # Enable showing throttling stats for every response received:
         'AUTOTHROTTLE_DEBUG': True,
+
         'LOG_FILE': 'data/logs/dr.log',
-        'COOKIES_ENABLED': False,
-        'HTTPCACHE_ENABLED' : False,
+
+        'JOBDIR' : 'data/' + name,
     }
 
     def __init__(self, category=None, *args, **kwargs):

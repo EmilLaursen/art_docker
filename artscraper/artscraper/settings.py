@@ -9,7 +9,7 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-import artscraper.prometheus
+from pathlib import Path
 
 BOT_NAME = 'artscraper'
 
@@ -25,14 +25,14 @@ USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) Safari/537.36'
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 4
+CONCURRENT_REQUESTS = 16
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 0
+DOWNLOAD_DELAY = 0.75
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 4
+CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
@@ -87,18 +87,18 @@ ITEM_PIPELINES = {
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-HTTPCACHE_ENABLED = True
-HTTPCACHE_EXPIRATION_SECS = 0
-HTTPCACHE_DIR = 'data/httpcache'
-HTTPCACHE_IGNORE_HTTP_CODES = [] # status codes to ignore. Default.
-HTTPCACHE_GZIP = True
+#HTTPCACHE_ENABLED = True
+#HTTPCACHE_EXPIRATION_SECS = 0
+#HTTPCACHE_DIR = 'data/httpcache'
+#HTTPCACHE_IGNORE_HTTP_CODES = [] # status codes to ignore. Default.
+#HTTPCACHE_GZIP = True
 # HTTPCACHE_POLICY = 'scrapy.extensions.httpcache.RFC2616Policy' 
-HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+#HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 DEPTH_STATS_VERBOSE = True
 
 #LOGGING
-LOG_FILE = 'data/logs/finans.log'
+#LOG_FILE = 'data/logs/finans.log'
 LOG_LEVEL = 'INFO'
 LOG_FORMATTER = 'artscraper.pipelines.PoliteLogFormatter' # Custom DropItem log handling.
 
@@ -114,3 +114,7 @@ PROMETHEUS_PORT = [6080]
 PROMETHEUS_HOST = '0.0.0.0'
 PROMETHEUS_PATH = 'metrics'
 PROMETHEUS_UPDATE_INTERVAL = 20
+
+# FEED EXPORTER
+FEED_URI = Path.cwd().as_uri() + '/data/%(name)s.jl'
+FEED_FORMAT = 'jsonlines'

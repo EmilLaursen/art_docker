@@ -15,4 +15,4 @@ VOLUME /data
 
 EXPOSE 6080
 
-CMD scrapy crawl arts -o data/arts.jl
+CMD scrapy crawl arts

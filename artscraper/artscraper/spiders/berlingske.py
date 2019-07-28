@@ -4,10 +4,16 @@ from scrapy.loader import ItemLoader
 import json
 import hashlib
 import logging
+from pathlib import Path
 
 class BerlingskeScraper(scrapy.Spider):
     name = 'arts'
     allowed_domains = ['berlingske.dk']
+    custom_settings = {
+        'LOG_FILE': 'data/logs/berlingske.log',
+        'JOBDIR' : 'data/' + name,
+    }
+
 
     def start_requests(self):
         urls = [

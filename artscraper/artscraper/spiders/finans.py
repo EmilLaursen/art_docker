@@ -4,14 +4,12 @@ from artscraper.items import ArtscraperItem
 from scrapy.loader import ItemLoader
 import json
 from datetime import datetime
+from pathlib import Path
 
 class FinansSpider(scrapy.Spider):
     name = 'finans'
     allowed_domains = ['finans.dk']
     custom_settings = {
-        'CONCURRENT_REQUESTS': 4,
-        'DOWNLOAD_DELAY': 0,
-        'CONCURRENT_REQUESTS_PER_DOMAIN': 4,
         'AUTOTHROTTLE_ENABLED': True,
         'AUTOTHROTTLE_START_DELAY': 1,
         # The maximum download delay to be set in case of high latencies
@@ -21,7 +19,10 @@ class FinansSpider(scrapy.Spider):
         'AUTOTHROTTLE_TARGET_CONCURRENCY': 4.0,
         # Enable showing throttling stats for every response received:
         'AUTOTHROTTLE_DEBUG': True,
+
         'LOG_FILE': 'data/logs/finans.log',
+
+        'JOBDIR' : 'data/' + name,
     }
 
 
