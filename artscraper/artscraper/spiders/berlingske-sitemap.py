@@ -18,7 +18,7 @@ class BerlingskeSitemapScraper(SitemapSpider):
 
     custom_settings = {
         'LOG_FILE': 'data/logs/berlingske-sitemap.log',
-        'LOG_LEVEL': 'DEBUG'
+        'LOG_LEVEL': 'DEBUG',
         'JOBDIR' : 'data/' + name,
     }
     def __init__(self, category=None, *args, **kwargs):
