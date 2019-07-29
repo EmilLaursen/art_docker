@@ -125,7 +125,7 @@ minute = 60
 hour = minute * 60
 
 # STOPPING CONDITION
-CLOSESPIDER_TIMEOUT = hour*3 # seconds. This is 1 hours.
+CLOSESPIDER_TIMEOUT = hour * 4 # seconds. This is 1 hours.
 CLOSESPIDER_ITEMCOUNT = 0
 CLOSESPIDER_PAGECOUNT = 0
 CLOSESPIDER_ERRORCOUNT = 0
