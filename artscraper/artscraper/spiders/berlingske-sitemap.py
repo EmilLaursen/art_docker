@@ -18,13 +18,12 @@ class BerlingskeSitemapScraper(SitemapSpider):
 
     custom_settings = {
         'LOG_FILE': 'data/logs/berlingske-sitemap.log',
-        'LOG_LEVEL': 'DEBUG',
         'JOBDIR' : 'data/' + name,
     }
     def __init__(self, category=None, *args, **kwargs):
         super(BerlingskeSitemapScraper, self).__init__(*args, **kwargs)
         
-        save_path = 'data/arts.jl'
+        save_path = 'data/bt_sitemap.jl' # should be loaded from settings
         self.scraped_urls = set()
         try:
             with open(save_path, mode='r') as reader:

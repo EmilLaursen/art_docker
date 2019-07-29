@@ -19,6 +19,7 @@ class DrSpider(SitemapSpider):
     sitemap_follow = ['/sitemap.dr']
 
     custom_settings = {
+        'DOWNLOAD_DELAY': 0.2,
         'AUTOTHROTTLE_ENABLED': True,
         'AUTOTHROTTLE_START_DELAY': 2,
         # The maximum download delay to be set in case of high latencies
@@ -37,7 +38,7 @@ class DrSpider(SitemapSpider):
     def __init__(self, category=None, *args, **kwargs):
         super(DrSpider, self).__init__(*args, **kwargs)
         
-        save_path = 'data/dr.jl'
+        save_path = 'data/drspider.jl' # should be loaded from config.
         self.scraped_urls = set()
         try:
             with open(save_path, mode='r') as reader:
