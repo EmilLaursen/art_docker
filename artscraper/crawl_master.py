@@ -18,6 +18,3 @@ if process.returncode == 0:
 time.sleep(5*minute)
 
 process = subprocess.run(dr_spider)
-
-
-process.
