@@ -4,17 +4,11 @@ import time
 
 dr_spider = ['scrapy', 'crawl', 'drspider']
 berlingske = ['scrapy', 'crawl', 'arts']
+bt_sitemap = ['scrapy', 'crawl', 'bt_sitemap']
 
 
 minute = 60
 hour = minute * 60
 
 
-process = subprocess.run(berlingske)
-
-if process.returncode == 0:
-    print('finished now?')
-
-time.sleep(5*minute)
-
-process = subprocess.run(dr_spider)
+process = subprocess.run(bt_sitemap)
