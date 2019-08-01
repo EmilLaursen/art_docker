@@ -2,3 +2,4 @@ Scrapy
 prometheus_client
 flask
 flask_restful
+psutil

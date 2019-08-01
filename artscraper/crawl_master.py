@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import subprocess
 import time
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import reqparse, abort, Api, Resource
-
+import psutil
 
 dr_spider = 'scrapy crawl drspider'
 berlingske = 'scrapy crawl arts'
@@ -46,9 +46,24 @@ class Stop(Resource):
         if _crawler_running():
             args = str(process.args) 
             process.send_signal(subprocess.signal.SIGINT)
+            time.sleep(60)
+            process.wait()
+            del process.poll()
             return {'success': 'Crawler '+ args + ' stopped.'}
         else:
             return {'error': 'No crawler running.'}
+
+class Processes(Resource):
+    def get(self):
+        res = []        
+        for proc in psutil.process_iter():
+            try:
+                pinfo = proc.as_dict(attrs=['pid', 'name', 'username'])
+            except psutil.NoSuchProcess:
+                pass
+            else:
+                res.append(pinfo)
+        return jsonify(res)
 
 class Test(Resource):
     def get(self):
@@ -71,6 +86,7 @@ api.add_resource(BtSitemap, '/start/bt_sitemap', endpoint='bt_sitemap')
 api.add_resource(Bt, '/start/bt', endpoint='bt')
 api.add_resource(Stop, '/stop', endpoint='stop')
 api.add_resource(Test, '/test', endpoint='test')
+api.add_resource(Processes, '/ps')
 
 
 if __name__ == '__main__':
