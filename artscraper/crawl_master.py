@@ -46,8 +46,11 @@ class Stop(Resource):
         if _crawler_running():
             args = str(process.args) 
             process.send_signal(subprocess.signal.SIGINT)
+            process.wait()
+            process = None
             return {'success': 'Crawler '+ args + ' stopped.'}
         else:
+            process = None
             return {'error': 'No crawler running.'}
 
 class Processes(Resource):
