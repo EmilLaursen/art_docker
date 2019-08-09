@@ -3,3 +3,4 @@ prometheus_client
 flask
 flask_restful
 psutil
+bloom_filter

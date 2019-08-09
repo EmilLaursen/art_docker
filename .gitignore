@@ -5,3 +5,4 @@ __pycache__
 .scrapy
 artscraper/data/drspider
 artscraper/data/arts
+.ipynb_checkpoints

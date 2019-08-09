@@ -43,6 +43,7 @@ class Bt(Resource):
 
 class Stop(Resource):
     def get(self):
+        global process
         if _crawler_running():
             args = str(process.args) 
             process.send_signal(subprocess.signal.SIGINT)

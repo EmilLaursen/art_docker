@@ -55,9 +55,9 @@ COOKIES_ENABLED = False
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'artscraper.middlewares.ArtscraperDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'artscraper.middlewares.VisitedFilter': 100,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -101,6 +101,11 @@ DEPTH_STATS_VERBOSE = True
 #LOG_FILE = 'data/logs/finans.log'
 LOG_LEVEL = 'INFO'
 LOG_FORMATTER = 'artscraper.pipelines.PoliteLogFormatter' # Custom DropItem log handling.
+
+#Visited BloomFilter
+VISITED_FILTER_MAX_ELEMENTS = 1500000
+VISITED_FILTER_EROOR_RATE = 1e-9
+VISITED_FILTER_PATH = Path.cwd().as_uri() + '/data/%(name)s.filter'
 
 # Use BFS order.
 DEPTH_PRIORITY = 1

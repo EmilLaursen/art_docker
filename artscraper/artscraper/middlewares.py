@@ -6,7 +6,8 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-
+from scrapy.exceptions import NotConfigured
+from bloom_filter import BloomFilter
 
 class ArtscraperSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -56,16 +57,31 @@ class ArtscraperSpiderMiddleware(object):
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
-class ArtscraperDownloaderMiddleware(object):
+logger = logging.getLogger(__name__)
+
+class VisitedFilter(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
 
+    def __init__(self, settings, stats):
+        self.visited = BloomFilter(
+            max_elements=settings.getint('VISITED_FILTER_MAX_REQUESTS', 2000000),
+            error_rate=settings.getfloat('VISITED_FILTER_ERROR_RATE', 1e-9),
+            filename=settings.get('VISITED_FILTER_PATH'),
+        )
+        self.stats = stats
+        logger.info(f'Loaded visited urls bloomfilter. Size {visited.num_bits_m / 1024 ** 2 * 8} MiB.')
+        
+
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
-        s = cls()
-        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
+        filter_path = settings.get('VISITED_FILTER_PATH', None)
+        if not filter_path:
+            raise NotConfigured
+        s = cls(crawler.settings, crawler.stats)
+        crawler.signals.connect(s.spider_closed, signal=signals.spider_closed)
         return s
 
     def process_request(self, request, spider):
@@ -78,6 +94,9 @@ class ArtscraperDownloaderMiddleware(object):
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
+        if request.url in self.visited:
+            self.stats.inc_value('visited_filter/duplicate')
+            raise IgnoreRequest('Request.url visited already: {request.url}')
         return None
 
     def process_response(self, request, response, spider):
@@ -87,6 +106,7 @@ class ArtscraperDownloaderMiddleware(object):
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
+        self.visited.add(response.url)
         return response
 
     def process_exception(self, request, exception, spider):
@@ -101,3 +121,7 @@ class ArtscraperDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+    def spider_closed(self, spider):
+        self.visited.backend.close()
+        spider.logger.info(f'Closed bloomfilter {}')
