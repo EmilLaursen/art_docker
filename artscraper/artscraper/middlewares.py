@@ -6,8 +6,9 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-from scrapy.exceptions import NotConfigured
+from scrapy.exceptions import NotConfigured, IgnoreRequest
 from bloom_filter import BloomFilter
+import logging
 
 class ArtscraperSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -71,13 +72,13 @@ class VisitedFilter(object):
             filename=settings.get('VISITED_FILTER_PATH'),
         )
         self.stats = stats
-        logger.info(f'Loaded visited urls bloomfilter. Size {visited.num_bits_m / 1024 ** 2 * 8} MiB.')
+        logger.info(f'Loaded visited urls bloomfilter. Size {self.visited.num_bits_m / 1024 ** 2 * 8} MiB.')
         
 
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
-        filter_path = settings.get('VISITED_FILTER_PATH', None)
+        filter_path = crawler.settings.get('VISITED_FILTER_PATH', None)
         if not filter_path:
             raise NotConfigured
         s = cls(crawler.settings, crawler.stats)
