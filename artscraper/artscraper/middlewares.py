@@ -124,4 +124,4 @@ class VisitedFilter(object):
 
     def spider_closed(self, spider):
         self.visited.backend.close()
-        spider.logger.info(f'Closed bloomfilter {}')
+        spider.logger.info(f'Closed bloomfilter {spider.name}')
