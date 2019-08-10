@@ -11,8 +11,4 @@ WORKDIR /artscraper
 
 COPY . .
 
-VOLUME /data
-
-EXPOSE 6080
-
 CMD ./crawl_master.py
