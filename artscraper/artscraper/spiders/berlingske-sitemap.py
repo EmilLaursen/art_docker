@@ -19,7 +19,6 @@ class BerlingskeSitemapScraper(SitemapSpider):
     custom_settings = {
         'LOG_FILE': 'data/logs/berlingske-sitemap.log',
         'JOBDIR' : 'data/' + name,
-        'CLOSESPIDER_ITEMCOUNT' : 20,
     }
     def __init__(self, category=None, *args, **kwargs):
         super(BerlingskeSitemapScraper, self).__init__(*args, **kwargs)
