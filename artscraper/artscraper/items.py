@@ -69,7 +69,7 @@ class ArtscraperItem(scrapy.Item):
     )
     paywall = Field()
     url = Field(
-        input_processor=TakeFirst
+        input_processor=TakeFirst()
     )
     body = Field()
     scrape_date = Field()
