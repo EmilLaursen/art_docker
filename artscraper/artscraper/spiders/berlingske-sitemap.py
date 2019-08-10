@@ -46,6 +46,7 @@ class BerlingskeSitemapScraper(SitemapSpider):
         l.add_css('title', '.article-header__title::text')
         l.add_css('sub_title', '.article-header__intro::text')
         l.add_css('body', '#articleBody h2 , #articleBody p')
+        l.add_value('scrape_date', datetime.now())
         yield l.load_item()
 
         for next_page in response.css('.teaser__title-link::attr(href)').getall():

@@ -72,7 +72,7 @@ class VisitedFilter(object):
             filename=settings.get('VISITED_FILTER_PATH'),
         )
         self.stats = stats
-        logger.info(f'Loaded visited urls bloomfilter. Size {self.visited.num_bits_m / 1024 ** 2 * 8} MiB.')
+        logger.info(f'Loaded visited urls bloomfilter. Size {self.visited.num_bits_m / (1024 ** 2 * 8)} MiB.')
         
 
     @classmethod
