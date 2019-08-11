@@ -23,7 +23,7 @@ class ArbejderenSpider(scrapy.Spider):
 
         'LOG_FILE': 'data/logs/arbejderen.log',
 
-        'JOBDIR' : 'data/' + name,
+        #'JOBDIR' : 'data/' + name,
 
         'VISITED_FILTER_PATH' : 'data/arbejderen.filter',
         'LOG_LEVEL' : 'INFO',
@@ -64,6 +64,11 @@ class ArbejderenSpider(scrapy.Spider):
         urls = [
             'http://www.arbejderen.dk/',
             'https://arbejderen.dk/blogs',
+            'https://arbejderen.dk/arbejde-og-kapital',
+            'https://arbejderen.dk/idekamp',
+            'https://arbejderen.dk/kultur',
+            'https://arbejderen.dk/indland',
+            'https://arbejderen.dk/udland',
         ]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse_startpage, meta={'dont_cache': True})

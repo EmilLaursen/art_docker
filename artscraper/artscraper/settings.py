@@ -105,7 +105,7 @@ LOG_FORMATTER = 'artscraper.pipelines.PoliteLogFormatter' # Custom DropItem log 
 #Visited BloomFilter
 VISITED_FILTER_MAX_ELEMENTS = 2000000
 VISITED_FILTER_EROOR_RATE = 1e-9
-VISITED_FILTER_PATH = 'data/bt_sitemap.filter'
+VISITED_FILTER_PATH = 'data/generic.filter'
 
 # Use BFS order.
 DEPTH_PRIORITY = 1

@@ -19,6 +19,7 @@ class BerlingskeSitemapScraper(SitemapSpider):
     custom_settings = {
         'LOG_FILE': 'data/logs/berlingske-sitemap.log',
         'JOBDIR' : 'data/' + name,
+        'VISITED_FILTER_PATH' : 'data/bt_sitemap.filter',
     }
     def __init__(self, category=None, *args, **kwargs):
         super(BerlingskeSitemapScraper, self).__init__(*args, **kwargs)
