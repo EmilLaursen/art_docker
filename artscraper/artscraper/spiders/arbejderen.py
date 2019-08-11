@@ -87,7 +87,7 @@ class ArbejderenSpider(scrapy.Spider):
 
     def parse_startpage(self, response):
         link_css = '.field-content a::attr(href)' if 'blogs' in response.url else self.start_page_links
-        self.logger.info(f'blogs in response.url? {'blogs' in response.url}. Response: {response.url}')
+        self.logger.info(f'blogs in response.url? {"blogs" in response.url}. Response: {response.url}')
         for next_page in response.css(link_css).getall():
             if next_page is not None:
                 parser = self.parse_blog if self.is_blog_url(next_page) else self.parse
