@@ -41,8 +41,11 @@ def extract_datetime(date_string):
 def remove_section_garbage(xs):
     if len(xs) > 1:
         cleaner = lambda y: 'Abonnement' not in y and 'Nyhedsvarsel' not in y and 'Direkte' not in y
-        return list(set(filter(cleaner, xs)))
+        return remove_duplicates(filter(cleaner, xs))
     return xs
+
+def remove_duplicates(xs):
+    return list(set(xs))
 
 class ArtscraperItem(scrapy.Item):
     # define the fields for your item here like:
@@ -71,5 +74,7 @@ class ArtscraperItem(scrapy.Item):
     url = Field(
         input_processor=TakeFirst()
     )
-    body = Field()
+    body = Field(
+        input_processor=MapCompose(str.strip, filter_empty)
+    )
     scrape_date = Field()
