@@ -1,8 +1,10 @@
 .vscode
 *.log
 *.jl
+*.filter
 __pycache__
 .scrapy
 artscraper/data/drspider
 artscraper/data/arts
+artscraper/data/arbejderen
 .ipynb_checkpoints
