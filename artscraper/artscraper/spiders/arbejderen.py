@@ -44,7 +44,7 @@ class ArbejderenSpider(scrapy.Spider):
         self.date_css = '.created::text' #
         self.section_css = '.artSec::text'
         self.title_css = '.pane-page-title h1::text' #
-        self.sub_title_css= '.manchet::text' #
+        self.sub_title_css= '.manchet, .manchetOld::text' #
         self.body_css = '.even p' #
 
         save_path = 'data/arbejderen.jl'
@@ -69,13 +69,25 @@ class ArbejderenSpider(scrapy.Spider):
             'https://arbejderen.dk/kultur',
             'https://arbejderen.dk/indland',
             'https://arbejderen.dk/udland',
+            'https://arbejderen.dk/marx',
+            'https://arbejderen.dk/teori',
+            'https://arbejderen.dk/s-regering',
+            'https://arbejderen.dk/ok20',
+            'https://arbejderen.dk/ghettolov',
+            'https://arbejderen.dk/livsstil',
+            'https://arbejderen.dk/v%C3%A5benindustri',
+            'https://arbejderen.dk/social-dumping',
+            'https://arbejderen.dk/tags/eu-modstand',
+            'https://arbejderen.dk/krig',
+            'https://arbejderen.dk/kalender',
+            'https://arbejderen.dk/navne',
         ]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse_startpage, meta={'dont_cache': True})
 
     def parse_startpage(self, response):
         link_css = '.field-content a::attr(href)' if 'blogs' in response.url else self.start_page_links
-
+        self.logger.info(f'blogs in response.url? {'blogs' in response.url}. Response: {response.url}')
         for next_page in response.css(link_css).getall():
             if next_page is not None:
                 parser = self.parse_blog if self.is_blog_url(next_page) else self.parse
