@@ -9,6 +9,7 @@ dr_spider = 'scrapy crawl drspider'
 berlingske = 'scrapy crawl arts'
 bt_sitemap = 'scrapy crawl bt_sitemap'
 arbejderen = 'scrapy crawl arbejderen'
+kristeligt = 'scrapy crawl kristeligt'
 
 minute = 60
 hour = minute * 60
@@ -44,6 +45,9 @@ class Bt(Resource):
 class Arb(Resource):
     def get(self):
         return _start_crawler(arbejderen)
+class Krist(Resource):
+    def get(self):
+        return _start_crawler(kristeligt)
 
 class Stop(Resource):
     def get(self):
@@ -86,6 +90,7 @@ class Test(Resource):
         return {'proc': process, 'ls': ls, 'pwd': pwd, 'du': du1, 'stop':  du2}
 
 
+api.add_resource(Krist, '/start/kristeligt', endpoint='kristeligt')
 api.add_resource(Arb, '/start/arbejderen', endpoint='arbejderen')
 api.add_resource(Dr, '/start/drspider', endpoint='drspider')
 api.add_resource(BtSitemap, '/start/bt_sitemap', endpoint='bt_sitemap')

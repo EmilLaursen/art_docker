@@ -42,7 +42,7 @@ class ArbejderenSpider(scrapy.Spider):
         self.authors_css = '.skribenttitel::text' #
         self.alt_authors_css = '#page-aside-beta .views-row-last span::text' #
         self.date_css = '.created::text' #
-        self.section_css = '.artSec::text'
+        # self.section_css = ''
         self.title_css = '.pane-page-title h1::text' #
         self.sub_title_css= '.manchet, .manchetOld::text' #
         self.body_css = '.even p' #
