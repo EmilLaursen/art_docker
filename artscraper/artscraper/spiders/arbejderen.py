@@ -11,7 +11,7 @@ class ArbejderenSpider(scrapy.Spider):
     name = 'arbejderen'
     allowed_domains = ['arbejderen.dk']
     custom_settings = {
-        'AUTOTHROTTLE_ENABLED': True,
+        'AUTOTHROTTLE_ENABLED': False,
         'AUTOTHROTTLE_START_DELAY': 1,
         # The maximum download delay to be set in case of high latencies
         'AUTOTHROTTLE_MAX_DELAY': 60,
@@ -19,7 +19,7 @@ class ArbejderenSpider(scrapy.Spider):
         # each remote server
         'AUTOTHROTTLE_TARGET_CONCURRENCY': 4.0,
         # Enable showing throttling stats for every response received:
-        'AUTOTHROTTLE_DEBUG': True,
+        'AUTOTHROTTLE_DEBUG': False,
 
         'LOG_FILE': 'data/logs/arbejderen.log',
 
@@ -28,10 +28,6 @@ class ArbejderenSpider(scrapy.Spider):
         'VISITED_FILTER_PATH' : 'data/arbejderen.filter',
         'LOG_LEVEL' : 'INFO',
     }
-
-
-    # Use from crawler ? how to instantiate ?
-    
 
     def __init__(self, category=None, *args, **kwargs):
         super(ArbejderenSpider, self).__init__(*args, **kwargs)
@@ -94,6 +90,7 @@ class ArbejderenSpider(scrapy.Spider):
                 yield response.follow(next_page, callback=parser)
 
     def parse(self, response):
+        self.logger.info(f'Parsing reponse {urlsplit(response.url).path}')
         l = ItemLoader(item=ArtscraperItem(), response=response)
         l.add_css('authors', self.authors_css)
         l.add_css('alt_authors', self.alt_authors_css)
@@ -114,6 +111,7 @@ class ArbejderenSpider(scrapy.Spider):
                 yield response.follow(next_page, callback=parser)
     
     def parse_blog(self, response):
+        self.logger.info(f'Parsing reponse {urlsplit(response.url).path}')
         l = ItemLoader(item=ArtscraperItem(), response=response)
         l.add_css('authors', '.views-row-first.views-row-last .views-field-name .field-content::text')
         l.add_css('date', '.pane-node-created .pane-content::text')

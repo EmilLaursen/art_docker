@@ -11,7 +11,7 @@ class KristeligtDagbladSpider(scrapy.Spider):
     name = 'kristeligt'
     allowed_domains = ['kristeligt-dagblad.dk']
     custom_settings = {
-        'AUTOTHROTTLE_ENABLED': True,
+        'AUTOTHROTTLE_ENABLED': False,
         'AUTOTHROTTLE_START_DELAY': 1,
         # The maximum download delay to be set in case of high latencies
         'AUTOTHROTTLE_MAX_DELAY': 60,
@@ -19,9 +19,9 @@ class KristeligtDagbladSpider(scrapy.Spider):
         # each remote server
         'AUTOTHROTTLE_TARGET_CONCURRENCY': 4.0,
         # Enable showing throttling stats for every response received:
-        'AUTOTHROTTLE_DEBUG': True,
+        'AUTOTHROTTLE_DEBUG': False,
         'LOG_FILE': 'data/logs/kristeligt.log',
-        #'JOBDIR' : 'data/' + name,
+        'JOBDIR' : 'data/' + name,
         'VISITED_FILTER_PATH' : 'data/kristeligt.filter',
         'LOG_LEVEL' : 'INFO',
     }
@@ -73,6 +73,7 @@ class KristeligtDagbladSpider(scrapy.Spider):
                 yield response.follow(next_page, callback=self.parse)
 
     def parse(self, response):
+        self.logger.info(f'Parsing reponse {urlsplit(response.url).path}')
         l = ItemLoader(item=ArtscraperItem(), response=response)
         
         #l.add_css('alt_authors', self.alt_authors_css)

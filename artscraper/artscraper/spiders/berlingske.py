@@ -5,6 +5,7 @@ import json
 import hashlib
 import logging
 from pathlib import Path
+from urllib.parse import urlsplit, unquote
 
 class BerlingskeScraper(scrapy.Spider):
     name = 'arts'
@@ -52,6 +53,7 @@ class BerlingskeScraper(scrapy.Spider):
         #)
 
     def parse(self, response):
+        self.logger.info(f'Parsing reponse {urlsplit(response.url).path}')
         l = ItemLoader(item=ArtscraperItem(), response=response)
         l.add_css('authors', '.article-byline__author-name::text')
         l.add_css('alt_authors', '.font-g1::text')

@@ -5,6 +5,7 @@ from scrapy.loader import ItemLoader
 import json
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import urlsplit, unquote
 
 class FinansSpider(scrapy.Spider):
     name = 'finans'
@@ -66,6 +67,7 @@ class FinansSpider(scrapy.Spider):
                 yield response.follow(next_page, callback=self.parse)
 
     def parse(self, response):
+        self.logger.info(f'Parsing reponse {urlsplit(response.url).path}')
         l = ItemLoader(item=ArtscraperItem(), response=response)
         l.add_css('authors', self.authors_css)
         l.add_css('alt_authors', self.alt_authors_css)
