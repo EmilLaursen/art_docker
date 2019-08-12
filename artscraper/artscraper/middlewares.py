@@ -95,7 +95,7 @@ class VisitedFilter(object):
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
-        if request.url in self.visited:
+        if request.url in self.visited and not request.meta['dont_cache']:
             self.stats.inc_value('visited_filter/duplicate')
             raise IgnoreRequest('Request.url visited already: {request.url}')
         return None
