@@ -10,7 +10,7 @@ berlingske = 'scrapy crawl arts'
 bt_sitemap = 'scrapy crawl bt_sitemap'
 arbejderen = 'scrapy crawl arbejderen'
 kristeligt = 'scrapy crawl kristeligt'
-finans = 'scraåy crawl finans'
+finans = 'scrapy crawl finans'
 
 minute = 60
 hour = minute * 60
