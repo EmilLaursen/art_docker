@@ -94,7 +94,7 @@ class Test(Resource):
         return {'proc': process, 'ls': ls, 'pwd': pwd, 'du': du1, 'stop':  du2}
 
 
-api.add_resource(Finans, 'start/finans', endpoint='finans')
+api.add_resource(Finans, '/start/finans', endpoint='finans')
 api.add_resource(Krist, '/start/kristeligt', endpoint='kristeligt')
 api.add_resource(Arb, '/start/arbejderen', endpoint='arbejderen')
 api.add_resource(Dr, '/start/drspider', endpoint='drspider')
