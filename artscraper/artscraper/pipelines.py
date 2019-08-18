@@ -13,12 +13,14 @@ from urllib.parse import urlparse
 class ArtscraperPipeline(object):
     def process_item(self, item, spider):
         url = item['url'][0]
-        if url in spider.scraped_urls:
-            spider.logger.info("Duplicate on item: {}".format(urlparse(url).path))
-            raise DropItem()
-        else:
-            spider.scraped_urls.add(url)
-            return item
+        if hasattr(spider, 'scraped_urls'):
+            if url in spider.scraped_urls:
+                spider.logger.info("Duplicate on item: {}".format(urlparse(url).path))
+                raise DropItem()
+            else:
+                spider.scraped_urls.add(url)
+        return item
+        
 
 
 class PoliteLogFormatter(logformatter.LogFormatter):
