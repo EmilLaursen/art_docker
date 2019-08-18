@@ -9,6 +9,7 @@ from scrapy import signals
 from scrapy.exceptions import NotConfigured, IgnoreRequest
 from bloom_filter import BloomFilter
 import logging
+from urllib.parse import urlparse
 
 class ArtscraperSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -95,9 +96,11 @@ class VisitedFilter(object):
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
-        if request.url in self.visited and not request.meta.get('dont_cache', False):
+        url_path = urlparse(request.url).path
+        if url_path in self.visited and not request.meta.get('dont_cache', False):
             self.stats.inc_value('visited_filter/duplicate')
-            raise IgnoreRequest('Request.url visited already: {request.url}')
+            logger.info('Request.url visited already: {url_path}')
+            raise IgnoreRequest()
         return None
 
     def process_response(self, request, response, spider):
@@ -107,7 +110,7 @@ class VisitedFilter(object):
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
-        self.visited.add(response.url)
+        self.visited.add(urlparse(response.url).path)
         return response
 
     def process_exception(self, request, exception, spider):
