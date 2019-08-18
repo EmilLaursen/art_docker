@@ -35,7 +35,7 @@ class FinansSpider(scrapy.Spider):
         
         self.start_page_links = '.artRelLink::attr(href) , .baronContainer a::attr(href) , .artHd::attr(href)'
         self.article_links = '.artHd a::attr(href) , .artRelatedColumnCnt a::attr(href)'
-        self.paywall_css = 'artViewLock__subscribe__erv'
+        self.paywall_css = '.artViewLock__plate::text'
         self.authors_css = '.popupCaller::text'
         self.alt_authors_css = '.bylineArt p::text'
         self.date_css = '.artTime::text'
