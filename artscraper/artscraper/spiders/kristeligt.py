@@ -21,7 +21,7 @@ class KristeligtDagbladSpider(scrapy.Spider):
         # Enable showing throttling stats for every response received:
         'AUTOTHROTTLE_DEBUG': False,
         'LOG_FILE': 'data/logs/kristeligt.log',
-        'JOBDIR' : 'data/' + name,
+        #'JOBDIR' : 'data/' + name,
         'VISITED_FILTER_PATH' : 'data/kristeligt.filter',
         'LOG_LEVEL' : 'INFO',
     }

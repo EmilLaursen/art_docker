@@ -19,7 +19,7 @@ class DrFrontpage(scrapy.Spider):
         # each remote server
         'AUTOTHROTTLE_TARGET_CONCURRENCY': 4.0,
         # Enable showing throttling stats for every response received:
-        'AUTOTHROTTLE_DEBUG': True,
+        'AUTOTHROTTLE_DEBUG': False,
 
         'LOG_FILE': 'data/logs/dr_frontpage.log',
 

@@ -23,7 +23,7 @@ class FinansSpider(scrapy.Spider):
 
         'LOG_FILE': 'data/logs/finans.log',
 
-        'JOBDIR' : 'data/' + name,
+        #'JOBDIR' : 'data/' + name,
     }
 
 
