@@ -99,7 +99,7 @@ class VisitedFilter(object):
         url_path = urlparse(request.url).path
         if url_path in self.visited and not request.meta.get('dont_cache', False):
             self.stats.inc_value('visited_filter/duplicate')
-            logger.info('Request.url visited already: {url_path}')
+            logger.info(f'Request.url visited already: {url_path}')
             raise IgnoreRequest()
         return None
 
