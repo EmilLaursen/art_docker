@@ -10,6 +10,7 @@ from urllib.parse import urlsplit, unquote
 class DrFrontpage(scrapy.Spider):
     name = 'dr_frontpage'
     custom_settings = {
+        'BOT_NAME' : name,
         'DOWNLOAD_DELAY': 2,
         'AUTOTHROTTLE_ENABLED': True,
         'AUTOTHROTTLE_START_DELAY': 2,

@@ -11,6 +11,7 @@ class ArbejderenSpider(scrapy.Spider):
     name = 'arbejderen'
     allowed_domains = ['arbejderen.dk']
     custom_settings = {
+        'BOT_NAME' : name,
         'AUTOTHROTTLE_ENABLED': False,
         'AUTOTHROTTLE_START_DELAY': 1,
         # The maximum download delay to be set in case of high latencies
@@ -42,7 +43,7 @@ class ArbejderenSpider(scrapy.Spider):
         self.title_css = '.pane-page-title h1::text' #
         self.sub_title_css= '.manchet, .manchetOld::text' #
         self.body_css = '.even p' #
-
+        """ 
         save_path = 'data/arbejderen.jl'
         self.scraped_urls = set()
         try:
@@ -55,7 +56,7 @@ class ArbejderenSpider(scrapy.Spider):
         except FileNotFoundError:
             self.logger.info('{} not found'.format(save_path))
         self.logger.info('Found {} scraped pages.'.format(len(self.scraped_urls)))
-
+        """
     def start_requests(self):
         urls = [
             'http://www.arbejderen.dk/',

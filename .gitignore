@@ -8,3 +8,7 @@ artscraper/data/drspider
 artscraper/data/arts
 artscraper/data/arbejderen
 .ipynb_checkpoints
+*.zip
+*.gz
+*.seen
+*.state

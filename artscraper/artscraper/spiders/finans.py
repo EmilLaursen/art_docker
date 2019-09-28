@@ -11,6 +11,7 @@ class FinansSpider(scrapy.Spider):
     name = 'finans'
     allowed_domains = ['finans.dk']
     custom_settings = {
+        'BOT_NAME' : name,
         'AUTOTHROTTLE_ENABLED': True,
         'AUTOTHROTTLE_START_DELAY': 1,
         # The maximum download delay to be set in case of high latencies
@@ -44,8 +45,7 @@ class FinansSpider(scrapy.Spider):
         self.sub_title_css= '.artManchet::text'
         self.body_css = '.artBody p'
 
-
-        save_path = 'data/finans.jl'
+        """         save_path = 'data/finans.jl'
         self.scraped_urls = set()
         try:
             with open(save_path, mode='r') as reader:
@@ -57,6 +57,7 @@ class FinansSpider(scrapy.Spider):
         except FileNotFoundError:
             self.logger.info('{} not found'.format(save_path))
         self.logger.info('Found {} scraped pages.'.format(len(self.scraped_urls)))
+        """
 
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse_startpage, meta={'dont_cache': True})

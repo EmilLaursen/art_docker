@@ -17,6 +17,7 @@ class BerlingskeSitemapScraper(SitemapSpider):
     sitemap_follow = ['sitemap.xml/articles']
 
     custom_settings = {
+        'BOT_NAME' : name,
         'LOG_FILE': 'data/logs/berlingske-sitemap.log',
         'JOBDIR' : 'data/' + name,
         'VISITED_FILTER_PATH' : 'data/bt_sitemap.filter',
@@ -24,7 +25,7 @@ class BerlingskeSitemapScraper(SitemapSpider):
     def __init__(self, category=None, *args, **kwargs):
         super(BerlingskeSitemapScraper, self).__init__(*args, **kwargs)
         
-        save_path = 'data/bt_sitemap.jl' # should be loaded from settings
+        """ save_path = 'data/bt_sitemap.jl' # should be loaded from settings
         self.scraped_urls = set()
         try:
             with open(save_path, mode='r') as reader:
@@ -36,6 +37,7 @@ class BerlingskeSitemapScraper(SitemapSpider):
         except FileNotFoundError:
             self.logger.info('{} not found'.format(save_path))
         self.logger.info('Found {} scraped pages.'.format(len(self.scraped_urls)))
+        """
 
     def parse(self, response):
         l = ItemLoader(item=ArtscraperItem(), response=response)

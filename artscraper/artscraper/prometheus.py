@@ -57,8 +57,8 @@ class WebService(Site):
         
         self.tasks = []
         self.stats = crawler.stats
-        self.crawler = crawler
         self.name = crawler.settings.get('BOT_NAME')
+        print(f'{dir(crawler)}')
         self.port = crawler.settings.get('PROMETHEUS_PORT', [9410])
         self.host = crawler.settings.get('PROMETHEUS_HOST', '0.0.0.0')
         self.path = crawler.settings.get('PROMETHEUS_PATH', 'metrics')

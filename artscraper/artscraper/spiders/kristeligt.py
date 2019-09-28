@@ -11,6 +11,7 @@ class KristeligtDagbladSpider(scrapy.Spider):
     name = 'kristeligt'
     allowed_domains = ['kristeligt-dagblad.dk']
     custom_settings = {
+        'BOT_NAME' : name,
         'AUTOTHROTTLE_ENABLED': False,
         'AUTOTHROTTLE_START_DELAY': 1,
         # The maximum download delay to be set in case of high latencies
@@ -39,7 +40,7 @@ class KristeligtDagbladSpider(scrapy.Spider):
         self.sub_title_css= '.lead::text' 
         self.body_css = '#new_recommendation+ .article p' 
 
-        save_path = 'data/kristeligt.jl'
+        """         save_path = 'data/kristeligt.jl'
         self.scraped_urls = set()
         try:
             with open(save_path, mode='r') as reader:
@@ -51,6 +52,7 @@ class KristeligtDagbladSpider(scrapy.Spider):
         except FileNotFoundError:
             self.logger.info('{} not found'.format(save_path))
         self.logger.info('Found {} scraped pages.'.format(len(self.scraped_urls)))
+        """
 
     def start_requests(self):
         urls = [
