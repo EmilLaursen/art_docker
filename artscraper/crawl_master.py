@@ -12,6 +12,7 @@ arbejderen = "scrapy crawl arbejderen"
 kristeligt = "scrapy crawl kristeligt"
 finans = "scrapy crawl finans"
 dr_frontpage = "scrapy crawl dr_frontpage"
+bt_frontpage = "scrapy crawl berlingske_frontpage"
 
 minute = 60
 hour = minute * 60
@@ -36,6 +37,11 @@ def _start_crawler(crawler):
         return {"error": "Crawler " + str(process.args) + "is already running."}
     process = subprocess.Popen(crawler, shell=True)
     return {"success": "Crawler " + str(process.args) + " started."}
+
+
+class BtFrontpage(Resource):
+    def get(self):
+        return _start_crawler(bt_frontpage)
 
 
 class Dr(Resource):
@@ -122,6 +128,7 @@ api.add_resource(Krist, "/start/kristeligt", endpoint="kristeligt")
 api.add_resource(Arb, "/start/arbejderen", endpoint="arbejderen")
 api.add_resource(Dr, "/start/drspider", endpoint="drspider")
 api.add_resource(BtSitemap, "/start/bt_sitemap", endpoint="bt_sitemap")
+api.add_resource(BtFrontpage, "/start/bt_frontpage", endpoint="bt_frontpage")
 api.add_resource(Bt, "/start/bt", endpoint="bt")
 api.add_resource(Stop, "/stop", endpoint="stop")
 api.add_resource(Test, "/test", endpoint="test")
