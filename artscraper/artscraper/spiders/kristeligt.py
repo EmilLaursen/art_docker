@@ -32,7 +32,7 @@ class KristeligtDagbladSpider(scrapy.Spider):
         self.start_page_links = '.heading+ .column a::attr(href) , .related a::attr(href) , .heading a::attr(href)' 
         self.article_links = '.link::attr(href)'
         self.paywall_css = '.paid'
-        self.authors_css = '.byline::text' 
+        self.authors_css = '.byline a::text' 
         #self.alt_authors_css = '#page-aside-beta .views-row-last span::text' #
         self.date_css = '.publication::text' 
         #self.section_css = '.artSec::text' #
