@@ -11,6 +11,7 @@ from bloom_filter import BloomFilter
 import logging
 from urllib.parse import urlparse
 
+
 class ArtscraperSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
@@ -56,10 +57,11 @@ class ArtscraperSpiderMiddleware(object):
             yield r
 
     def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
+        spider.logger.info("Spider opened: %s" % spider.name)
 
 
 logger = logging.getLogger(__name__)
+
 
 class VisitedFilter(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -68,18 +70,19 @@ class VisitedFilter(object):
 
     def __init__(self, settings, stats):
         self.visited = BloomFilter(
-            max_elements=settings.getint('VISITED_FILTER_MAX_REQUESTS', 2000000),
-            error_rate=settings.getfloat('VISITED_FILTER_ERROR_RATE', 1e-9),
-            filename=settings.get('VISITED_FILTER_PATH'),
+            max_elements=settings.getint("VISITED_FILTER_MAX_REQUESTS", 2000000),
+            error_rate=settings.getfloat("VISITED_FILTER_ERROR_RATE", 1e-9),
+            filename=settings.get("VISITED_FILTER_PATH"),
         )
         self.stats = stats
-        logger.info(f'Loaded visited urls bloomfilter. Size {self.visited.num_bits_m / (1024 ** 2 * 8)} MiB.')
-        
+        logger.info(
+            f"Loaded visited urls bloomfilter. Size {self.visited.num_bits_m / (1024 ** 2 * 8)} MiB."
+        )
 
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
-        filter_path = crawler.settings.get('VISITED_FILTER_PATH', None)
+        filter_path = crawler.settings.get("VISITED_FILTER_PATH", None)
         if not filter_path:
             raise NotConfigured
         s = cls(crawler.settings, crawler.stats)
@@ -97,9 +100,9 @@ class VisitedFilter(object):
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
         url_path = urlparse(request.url).path
-        if url_path in self.visited and not request.meta.get('dont_cache', False):
-            self.stats.inc_value('visited_filter/duplicate')
-            logger.info(f'Request.url visited already: {url_path}')
+        if url_path in self.visited and not request.meta.get("dont_cache", False):
+            self.stats.inc_value("visited_filter/duplicate")
+            logger.info(f"Request.url visited already: {url_path}")
             raise IgnoreRequest()
         return None
 
@@ -124,8 +127,8 @@ class VisitedFilter(object):
         pass
 
     def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
+        spider.logger.info("Spider opened: %s" % spider.name)
 
     def spider_closed(self, spider):
         self.visited.backend.close()
-        spider.logger.info(f'Closed bloomfilter {spider.name}')
+        spider.logger.info(f"Closed bloomfilter {spider.name}")

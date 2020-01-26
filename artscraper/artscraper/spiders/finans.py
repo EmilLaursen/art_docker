@@ -7,43 +7,42 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
 
+
 class FinansSpider(scrapy.Spider):
-    name = 'finans'
-    allowed_domains = ['finans.dk']
+    name = "finans"
+    allowed_domains = ["finans.dk"]
     custom_settings = {
-        'BOT_NAME' : name,
-        'AUTOTHROTTLE_ENABLED': True,
-        'AUTOTHROTTLE_START_DELAY': 1,
+        "BOT_NAME": name,
+        "AUTOTHROTTLE_ENABLED": True,
+        "AUTOTHROTTLE_START_DELAY": 1,
         # The maximum download delay to be set in case of high latencies
-        'AUTOTHROTTLE_MAX_DELAY': 60,
+        "AUTOTHROTTLE_MAX_DELAY": 60,
         # The average number of requests Scrapy should be sending in parallel to
         # each remote server
-        'AUTOTHROTTLE_TARGET_CONCURRENCY': 4.0,
+        "AUTOTHROTTLE_TARGET_CONCURRENCY": 4.0,
         # Enable showing throttling stats for every response received:
-        'AUTOTHROTTLE_DEBUG': False,
-
-        'LOG_FILE': 'data/logs/finans.log',
-
+        "AUTOTHROTTLE_DEBUG": False,
+        "LOG_FILE": "data/logs/finans.log",
         #'JOBDIR' : 'data/' + name,
     }
 
-
     # Use from crawler ? how to instantiate ?
 
-    scrape_date = ''
+    scrape_date = ""
+
     def start_requests(self):
-        urls = ['http://www.finans.dk/']
-        
-        self.start_page_links = '.artRelLink::attr(href) , .baronContainer a::attr(href) , .artHd::attr(href)'
-        self.article_links = '.artHd a::attr(href) , .artRelatedColumnCnt a::attr(href)'
-        self.paywall_css = '.artViewLock__plate::text'
-        self.authors_css = '.popupCaller::text'
-        self.alt_authors_css = '.bylineArt p::text'
-        self.date_css = '.artTime::text'
-        self.section_css = '.artSec::text'
-        self.title_css = 'h1::text'
-        self.sub_title_css= '.artManchet::text'
-        self.body_css = '.artBody p'
+        urls = ["http://www.finans.dk/"]
+
+        self.start_page_links = ".artRelLink::attr(href) , .baronContainer a::attr(href) , .artHd::attr(href)"
+        self.article_links = ".artHd a::attr(href) , .artRelatedColumnCnt a::attr(href)"
+        self.paywall_css = ".artViewLock__plate::text"
+        self.authors_css = ".popupCaller::text"
+        self.alt_authors_css = ".bylineArt p::text"
+        self.date_css = ".artTime::text"
+        self.section_css = ".artSec::text"
+        self.title_css = "h1::text"
+        self.sub_title_css = ".artManchet::text"
+        self.body_css = ".artBody p"
 
         """         save_path = 'data/finans.jl'
         self.scraped_urls = set()
@@ -60,7 +59,9 @@ class FinansSpider(scrapy.Spider):
         """
 
         for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse_startpage, meta={'dont_cache': True})
+            yield scrapy.Request(
+                url=url, callback=self.parse_startpage, meta={"dont_cache": True}
+            )
 
     def parse_startpage(self, response):
         for next_page in response.css(self.start_page_links).getall():
@@ -68,18 +69,18 @@ class FinansSpider(scrapy.Spider):
                 yield response.follow(next_page, callback=self.parse)
 
     def parse(self, response):
-        self.logger.info(f'Parsing reponse {urlsplit(response.url).path}')
+        self.logger.info(f"Parsing reponse {urlsplit(response.url).path}")
         l = ItemLoader(item=ArtscraperItem(), response=response)
-        l.add_css('authors', self.authors_css)
-        l.add_css('alt_authors', self.alt_authors_css)
-        l.add_css('date', self.date_css)
-        l.add_css('paywall', self.paywall_css)
-        l.add_value('url', response.url)
-        l.add_css('section', self.section_css)
-        l.add_css('title', self.title_css)
-        l.add_css('sub_title', self.sub_title_css)
-        l.add_css('body', self.body_css)
-        l.add_value('scrape_date', datetime.now())
+        l.add_css("authors", self.authors_css)
+        l.add_css("alt_authors", self.alt_authors_css)
+        l.add_css("date", self.date_css)
+        l.add_css("paywall", self.paywall_css)
+        l.add_value("url", response.url)
+        l.add_css("section", self.section_css)
+        l.add_css("title", self.title_css)
+        l.add_css("sub_title", self.sub_title_css)
+        l.add_css("body", self.body_css)
+        l.add_value("scrape_date", datetime.now())
         yield l.load_item()
 
         for next_page in response.css(self.article_links).getall():

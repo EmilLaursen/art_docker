@@ -12,72 +12,73 @@ import re
 
 logger = logging.getLogger(__name__)
 
-prefix = 'spr_'
+prefix = "spr_"
 
 defaults = [
-    'downloader/request_bytes',
-    'downloader/request_count',
-    'downloader/request_method_count/GET',
-    'downloader/response_bytes',
-    'downloader/response_count',
-    'downloader/response_status_count/200',
-    'dupefilter/filtered',
-    'elapsed_time_seconds',
-    'httpcache/firsthand',
-    'httpcache/hit',
-    'httpcache/miss',
-    'httpcache/store',
-    'item_dropped_count',
-    'item_dropped_reasons_count/DropItem',
-    'item_scraped_count',
-    'log_count/INFO',
-    'memusage/max',
-    'memusage/startup',
-    'offsite/domain',
-    'offsite/filtered',
-    'request_depth_max',
-    'response_received_count',
-    'robotstxt/request_count',
-    'robotstxt/response_count',
-    'robotstxt/response_status_count/200',
-    'scheduler/dequeued',
-    'scheduler/dequeued/memory',
-    'scheduler/enqueued',
-    'scheduler/enqueued/memory',
+    "downloader/request_bytes",
+    "downloader/request_count",
+    "downloader/request_method_count/GET",
+    "downloader/response_bytes",
+    "downloader/response_count",
+    "downloader/response_status_count/200",
+    "dupefilter/filtered",
+    "elapsed_time_seconds",
+    "httpcache/firsthand",
+    "httpcache/hit",
+    "httpcache/miss",
+    "httpcache/store",
+    "item_dropped_count",
+    "item_dropped_reasons_count/DropItem",
+    "item_scraped_count",
+    "log_count/INFO",
+    "memusage/max",
+    "memusage/startup",
+    "offsite/domain",
+    "offsite/filtered",
+    "request_depth_max",
+    "response_received_count",
+    "robotstxt/request_count",
+    "robotstxt/response_count",
+    "robotstxt/response_status_count/200",
+    "scheduler/dequeued",
+    "scheduler/dequeued/memory",
+    "scheduler/enqueued",
+    "scheduler/enqueued/memory",
 ]
-defaults = [re.sub(r'([^a-zA-Z0-9_:]+)', '_', d) for d in defaults]
+defaults = [re.sub(r"([^a-zA-Z0-9_:]+)", "_", d) for d in defaults]
+
 
 class WebService(Site):
     """
 
     """
+
     def __init__(self, crawler):
-        if not crawler.settings.getbool('PROMETHEUS_ENABLED', True):
+        if not crawler.settings.getbool("PROMETHEUS_ENABLED", True):
             raise NotConfigured
-        
+
         self.tasks = []
         self.stats = crawler.stats
-        self.name = crawler.settings.get('BOT_NAME')
-        print(f'{dir(crawler)}')
-        self.port = crawler.settings.get('PROMETHEUS_PORT', [9410])
-        self.host = crawler.settings.get('PROMETHEUS_HOST', '0.0.0.0')
-        self.path = crawler.settings.get('PROMETHEUS_PATH', 'metrics')
-        self.interval = crawler.settings.get('PROMETHEUS_UPDATE_INTERVAL', 30)
+        self.name = crawler.settings.get("BOT_NAME")
+        print(f"{dir(crawler)}")
+        self.port = crawler.settings.get("PROMETHEUS_PORT", [9410])
+        self.host = crawler.settings.get("PROMETHEUS_HOST", "0.0.0.0")
+        self.path = crawler.settings.get("PROMETHEUS_PATH", "metrics")
+        self.interval = crawler.settings.get("PROMETHEUS_UPDATE_INTERVAL", 30)
 
         self.seen_stats = {}
         for default in defaults:
-            g = Gauge(prefix + default, '', ['spider'])
+            g = Gauge(prefix + default, "", ["spider"])
             g.labels(spider=self.name).set(0)
-            self.seen_stats[default] = g    
-        
-        # Global (non-spider level specific) stats     
-        self.spr_opened = Gauge('spr_opened', 'Spider opened', ['spider'])
-        self.spr_closed = Gauge(
-            'spr_closed', 'Spider closed', ['spider', 'reason'])
+            self.seen_stats[default] = g
+
+        # Global (non-spider level specific) stats
+        self.spr_opened = Gauge("spr_opened", "Spider opened", ["spider"])
+        self.spr_closed = Gauge("spr_closed", "Spider closed", ["spider", "reason"])
 
         root = resource.Resource()
         self.promtheus = None
-        root.putChild(self.path.encode('utf-8'), MetricsResource())
+        root.putChild(self.path.encode("utf-8"), MetricsResource())
         server.Site.__init__(self, root)
 
         crawler.signals.connect(self.engine_started, signals.engine_started)
@@ -115,18 +116,21 @@ class WebService(Site):
         self.spr_closed.labels(spider=self.name, reason=reason).inc()
 
     def update(self):
-        logging.debug('prometheus.update stats: {}'.format(self.stats.get_stats()))
+        logging.debug("prometheus.update stats: {}".format(self.stats.get_stats()))
 
         for field, stat in self.stats.get_stats().items():
             if not isinstance(stat, int):
                 continue
-            
-            field = re.sub(r'([^a-zA-Z0-9_:]+)', '_', field)
-            if not re.match(r'([a-zA-Z_:][a-zA-Z0-9_:]*)', prefix + field):
-                raise ValueError('The gauge name {} does not conform to prometheus datamodel.'.format(prefix + field))
+
+            field = re.sub(r"([^a-zA-Z0-9_:]+)", "_", field)
+            if not re.match(r"([a-zA-Z_:][a-zA-Z0-9_:]*)", prefix + field):
+                raise ValueError(
+                    "The gauge name {} does not conform to prometheus datamodel.".format(
+                        prefix + field
+                    )
+                )
             gauge = self.seen_stats.get(field)
             if not gauge:
-                gauge = Gauge(prefix + field, '', ['spider'])    
+                gauge = Gauge(prefix + field, "", ["spider"])
             gauge.labels(spider=self.name).set(stat)
             self.seen_stats[field] = gauge
-        
