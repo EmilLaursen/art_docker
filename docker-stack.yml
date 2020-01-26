@@ -32,7 +32,7 @@ services:
           - node.role==manager
 
   node-exporter:
-    image: prom/node-exporter:v.18.1
+    image: prom/node-exporter:v0.18.1
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -78,7 +78,7 @@ services:
       - 6080:6080
       - 5666:5666
     volumes:
-      - "/data:/artscraper/data"
+      - "./data:/artscraper/data"
     networks:
       - monitor-net
     deploy:
