@@ -8,12 +8,11 @@ build:
 	#docker ps --filter status=dead --filter status=exited -aq | xargs -r docker rm -v
 	# Or docker system prune --force. But this seems to mess with running containers.
 	git pull
-	docker build -t artscraper:latest $(HOME)/repos/art_docker/artscraper
-	docker tag artscraper:latest emillime/artscraper:latest
+	docker build -t emillime/artscraper:latest $(HOME)/repos/art_docker/artscraper
 	docker login
 	docker push emillime/artscraper:latest
 run:
-	HOSTNAME=$(hostname) docker stack deploy -c $(HOME)/repos/prometheus/docker-stack.yml prom
+	HOSTNAME=$(hostname) docker stack deploy -c docker-stack.yml prom
 full:
 	make build
 	make run
