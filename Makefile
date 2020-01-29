@@ -8,7 +8,7 @@ build:
 	#docker ps --filter status=dead --filter status=exited -aq | xargs -r docker rm -v
 	# Or docker system prune --force. But this seems to mess with running containers.
 	git pull
-	docker build -t emillime/artscraper:latest $(HOME)/repos/art_docker/artscraper
+	docker build -f fastapi-dockerfile -t emillime/artscraper:latest $(HOME)/repos/art_docker/artscraper
 	docker login
 	docker push emillime/artscraper:latest
 run:
