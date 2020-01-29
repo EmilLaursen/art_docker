@@ -8,7 +8,7 @@ cryptography==2.8
 cssselect==1.1.0
 fastapi==0.47.1
 h11==0.9.0
-httptools==0.0.13; sys_platform != "win32" and sys_platform != "cygwin" and platform_python_implementation != "pypy"
+httptools==0.0.13
 hyperlink==19.0.0; python_version >= "3.5"
 idna==2.8; python_version >= "3.5"
 incremental==17.5.0; python_version >= "3.5"
@@ -24,7 +24,7 @@ pydantic==1.4
 pydispatcher==2.0.5
 pyhamcrest==2.0.0; python_version >= "3.5"
 pyopenssl==19.1.0
-pypydispatcher==2.1.2; platform_python_implementation == "PyPy"
+pypydispatcher==2.1.2;
 queuelib==1.5.0
 scrapy==1.8.0
 service-identity==18.1.0
@@ -32,7 +32,7 @@ six==1.14.0
 starlette==0.12.9
 twisted==19.10.0; python_version >= "3.5"
 uvicorn==0.11.2
-uvloop==0.14.0; sys_platform != "win32" and sys_platform != "cygwin" and platform_python_implementation != "pypy"
+uvloop==0.14.0
 w3lib==1.21.0
 websockets==8.1
 zope.interface==4.7.1
