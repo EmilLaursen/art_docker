@@ -69,8 +69,13 @@ class VisitedFilter(object):
     # passed objects.
 
     def __init__(self, settings, stats):
+        self.never_cache = set(
+            urlparse(url).path for url in settings.get("NEVER_CACHE", [])
+        )
+        self.never_cache.add(urlparse("/robots.txt").path)
+
         self.visited = BloomFilter(
-            max_elements=settings.getint("VISITED_FILTER_MAX_REQUESTS", 2000000),
+            max_elements=settings.getint("VISITED_FILTER_MAX_REQUESTS", 4000000),
             error_rate=settings.getfloat("VISITED_FILTER_ERROR_RATE", 1e-9),
             filename=settings.get("VISITED_FILTER_PATH"),
         )
@@ -82,7 +87,9 @@ class VisitedFilter(object):
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
+
         filter_path = crawler.settings.get("VISITED_FILTER_PATH", None)
+
         if not filter_path:
             raise NotConfigured
         s = cls(crawler.settings, crawler.stats)
@@ -100,7 +107,11 @@ class VisitedFilter(object):
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
         url_path = urlparse(request.url).path
-        if url_path in self.visited and not request.meta.get("dont_cache", False):
+        if (
+            url_path in self.visited
+            and not request.meta.get("dont_cache", False)
+            and url_path not in self.never_cache
+        ):
             self.stats.inc_value("visited_filter/duplicate")
             logger.info(f"Request.url visited already: {url_path}")
             raise IgnoreRequest()

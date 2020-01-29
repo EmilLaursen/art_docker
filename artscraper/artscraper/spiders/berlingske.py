@@ -45,7 +45,13 @@ class BerlingskeScraper(scrapy.Spider):
             "https://www.berlingske.dk/usa/",
         ]
         for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+            yield scrapy.Request(
+                # Visted filter middleware uses dont_cache key (also used by scrapy native middleware)
+                # as flag telling it not to add these to cache.
+                url=url,
+                callback=self.parse,
+                meta={"dont_cache": True},
+            )
 
     def parse(self, response):
         self.logger.info(f"Parsing reponse {urlsplit(response.url).path}")

@@ -12,6 +12,7 @@ build:
 	docker login
 	docker push emillime/artscraper:latest
 run:
+	docker stack rm prom
 	HOSTNAME=$(hostname) docker stack deploy -c docker-stack.yml prom
 full:
 	make build

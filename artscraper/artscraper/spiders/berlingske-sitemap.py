@@ -27,7 +27,9 @@ class BerlingskeSitemapScraper(SitemapSpider):
 
     def parse(self, response):
         l = ItemLoader(item=ArtscraperItem(), response=response)
-        l.add_css("authors", ".article-byline__author-name::text")
+        l.add_css(
+            "authors", ".article-byline__author-name::text"
+        )  # .article-byline__author-name
         l.add_css("alt_authors", ".font-g1::text")
         l.add_css("date", ".article-byline__date::text")
         l.add_value("url", response.url)

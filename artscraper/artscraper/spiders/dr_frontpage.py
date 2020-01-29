@@ -9,7 +9,7 @@ from urllib.parse import urlsplit, unquote
 
 
 class DrFrontpage(scrapy.Spider):
-    name = "dr_frontpage"
+    name = "dr_frontpage_old"
     custom_settings = {
         "BOT_NAME": name,
         "DOWNLOAD_DELAY": 2,
@@ -40,6 +40,8 @@ class DrFrontpage(scrapy.Spider):
         # self.alt_authors_css = ''
         self.body_css = ".dre-article-body__paragraph"
         self.start_page_links = ".heading-small a::attr(href)"
+
+        # possible article_link css : .dre-teaser a
 
     def start_requests(self):  # Ad-hoc hack to add the broken sitemap.
         urls = [

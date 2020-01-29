@@ -12,3 +12,4 @@ artscraper/data/arbejderen
 *.gz
 *.seen
 *.state
+notebooks/

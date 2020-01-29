@@ -31,9 +31,9 @@ class FinansSpider(scrapy.Spider):
     scrape_date = ""
 
     def start_requests(self):
-        urls = ["http://www.finans.dk/"]
+        urls = ["http://www.finans.dk/", "https://finans.dk/analyse/", "https://finans.dk/indsigt/", "https://finans.dk/investor", "https://finans.dk/debat/"]
 
-        self.start_page_links = ".artRelLink::attr(href) , .baronContainer a::attr(href) , .artHd::attr(href)"
+        self.start_page_links = ".artRelLink::attr(href) , .baronContainer a::attr(href) , .artHd::attr(href), .card__title a::attr(href)"
         self.article_links = ".artHd a::attr(href) , .artRelatedColumnCnt a::attr(href)"
         self.paywall_css = ".artViewLock__plate::text"
         self.authors_css = ".popupCaller::text"
@@ -43,20 +43,6 @@ class FinansSpider(scrapy.Spider):
         self.title_css = "h1::text"
         self.sub_title_css = ".artManchet::text"
         self.body_css = ".artBody p"
-
-        """         save_path = 'data/finans.jl'
-        self.scraped_urls = set()
-        try:
-            with open(save_path, mode='r') as reader:
-                lines = reader.readlines()
-                for line in lines:
-                    dic = json.loads(line)
-                    url = dic['url'][0]
-                    self.scraped_urls.add(url)
-        except FileNotFoundError:
-            self.logger.info('{} not found'.format(save_path))
-        self.logger.info('Found {} scraped pages.'.format(len(self.scraped_urls)))
-        """
 
         for url in urls:
             yield scrapy.Request(

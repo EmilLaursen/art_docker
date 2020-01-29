@@ -41,20 +41,6 @@ class ArbejderenSpider(scrapy.Spider):
         self.title_css = ".pane-page-title h1::text"  #
         self.sub_title_css = ".manchet, .manchetOld::text"  #
         self.body_css = ".even p"  #
-        """ 
-        save_path = 'data/arbejderen.jl'
-        self.scraped_urls = set()
-        try:
-            with open(save_path, mode='r') as reader:
-                lines = reader.readlines()
-                for line in lines:
-                    dic = json.loads(line)
-                    url = dic['url'][0]
-                    self.scraped_urls.add(url)
-        except FileNotFoundError:
-            self.logger.info('{} not found'.format(save_path))
-        self.logger.info('Found {} scraped pages.'.format(len(self.scraped_urls)))
-        """
 
     def start_requests(self):
         urls = [
