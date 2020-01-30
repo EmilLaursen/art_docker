@@ -10,10 +10,11 @@
 - [*] Figure out how to operate on full list of fields, and each scraped field (Scrapy Itemloader docs). Use this to apply TakeFirst, and removedupes where appropriate.
 - [*] Use w3lib to remove tags. Compare speed with html2text.
 - [] Use scrapyd to orchestrate spiders. Need to eggify spiders.
+- [] Data duplicate detection. Several Ritzau articles on all sites.
 
 
 
 # Custom middleware
 
-- persisting dupefilter using a bloomfilter.
+- persisting request dupefilter using a bloomfilter.
 - prometheus exporter.

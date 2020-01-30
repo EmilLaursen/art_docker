@@ -97,7 +97,7 @@ DEPTH_STATS_VERBOSE = True
 LOG_FILE = (
     "data/logs/overwrite_name.log"
 )  # this nameing trick does not work here! Overwrite in spider
-LOG_LEVEL = "DEBUG"
+LOG_LEVEL = "INFO"
 LOG_FORMATTER = (
     "artscraper.pipelines.PoliteLogFormatter"
 )  # Custom DropItem log handling.

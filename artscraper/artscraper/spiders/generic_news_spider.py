@@ -69,7 +69,7 @@ class NewssiteFrontpageSpider(scrapy.Spider):
         print(response)
         # Prepare default item parse logic
         loader = self.default_itemloader(response)
-        print(loader.load_item())
+
         # Check if any custom parsing logic is needed for this response.
         custom_loaders = [
             custom_itemloader
@@ -77,11 +77,9 @@ class NewssiteFrontpageSpider(scrapy.Spider):
             if pred(response)
         ]
 
-       
-
         for itemloader in custom_loaders:
             loader = itemloader(loader, response)
-        print(loader.load_item())
+
         yield loader.load_item()
 
         follow_css = self.choose_follow_css(response)

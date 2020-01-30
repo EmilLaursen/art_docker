@@ -26,7 +26,9 @@ class ScrapyProcess(metaclass=Singleton):
             self.process = subprocess.Popen(f"scrapy crawl {spider}", shell=True)
             return {"success": "Crawler " + str(self.process.args) + " started."}
         else:
-            return {"failure": "Crawler " + str(self.process.args) + " is already running."}
+            return {
+                "failure": "Crawler " + str(self.process.args) + " is already running."
+            }
 
     def stop(self):
         if self._crawler_running():
@@ -48,6 +50,7 @@ class Spider(str, Enum):
     finans_frontpage = "finans_frontpage"
     kristeligt_frontpage = "kristeligt_frontpage"
     arbejderen_frontpage = "arbejderen_frontpage"
+
 
 @app.get("/start/{spider}")
 async def launch_spider(spider: Spider):
