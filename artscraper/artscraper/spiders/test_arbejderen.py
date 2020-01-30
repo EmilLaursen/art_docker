@@ -66,7 +66,7 @@ default_selectors = {
     "title_css": ".pane-page-title h1::text",
     "sub_title_css": ".manchet, .manchetOld::text",
     "body_css": ".even p",
-    "section_css": "",
+    "section_css": ".noSection",
     "startpage_links": startpage_links,
     "predicate_loader_pairs": [
         (is_blog_url, debatindlaeg_loader),

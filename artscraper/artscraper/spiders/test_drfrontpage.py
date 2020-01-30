@@ -20,7 +20,7 @@ default_selectors = {
     "article_follow_css": ".dre-teaser a::attr(href)",
     "paywall_css": ".paid",
     "authors_css": ".dre-article-byline__author span::text",
-    "alt_authors_css": "",
+    "alt_authors_css": ".noAltAuthors",
     "date_css": ".dre-article-byline__date::text",
     "title_css": ".dre-article-title__title::text",
     "sub_title_css": ".dre-article-title__summary::text",
