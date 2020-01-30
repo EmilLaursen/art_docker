@@ -1,8 +1,6 @@
 from artscraper.spiders.generic_news_spider import NewssiteFrontpageSpider
 from urllib.parse import urlsplit, unquote
 
-logger = logging.getLogger(__name__)
-
 
 startpage_links = [
     "http://www.arbejderen.dk/",
@@ -27,7 +25,8 @@ startpage_links = [
 ]
 
 
-def is_blog_url(url):
+def is_blog(response):
+    url = response.url
     return (
         _get_section(url) == "blog-indlæg"
         or _get_section(url) == "blog-indl%C3%A6g"
@@ -36,13 +35,7 @@ def is_blog_url(url):
 
 
 def _get_section(url):
-    try:
-        splitpath = urlsplit(url).path.split(sep="/")
-    except AttributeError:
-        print(url)
-        logger.info(url)
-        raise
-
+    splitpath = urlsplit(url).path.split(sep="/")
     section = splitpath[1] if len(splitpath) >= 1 else ""
     return unquote(section)
 
