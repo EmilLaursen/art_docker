@@ -125,10 +125,9 @@ PROMETHEUS_PATH = "metrics"
 PROMETHEUS_UPDATE_INTERVAL = 20
 
 # FEED EXPORTER
-FEED_URI = Path.cwd().as_uri() + "/data/%(name)s.jl"
+#FEED_URI = Path.cwd().as_uri() + "/data/%(name)s.jl"
 FEED_FORMAT = "jsonlines"
-# FEED_URI = "s3://dk-new-scrape/%(name)s/%(time)s.jsonl"
-# FEED_URI = "s3://aws_key:aws_secret@mybucket/path/to/%(name)s.jsonl"
+FEED_URI = "s3://dk-new-scrape/%(name)s/%(time)s.jsonl"
 
 minute = 60
 hour = minute * 60

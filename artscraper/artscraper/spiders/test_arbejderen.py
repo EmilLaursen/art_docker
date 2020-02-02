@@ -46,7 +46,6 @@ def section_loader(itemloader, response):
 
 
 def debatindlaeg_loader(itemloader, response):
-    itemloader.add_value("paywall", False)
     itemloader.add_css(
         "authors",
         ".views-row-first.views-row-last .views-field-name .field-content::text",
@@ -71,7 +70,7 @@ default_selectors = {
     "section_css": ".noSection",
     "startpage_links": startpage_links,
     "predicate_loader_pairs": [
-        (is_blog_url, debatindlaeg_loader),
+        (is_blog, debatindlaeg_loader),
         (lambda x: True, section_loader),
     ],
 }
@@ -94,7 +93,7 @@ class ArbejderenFrontpage(NewssiteFrontpageSpider):
         super(ArbejderenFrontpage, self).__init__(*args, **kwargs)
 
     def choose_follow_css(self, response):
-        if is_blog_url(response.url):
+        if is_blog(response):
             return ".field-content a::attr(href)"
         elif response.url in self.startpage_links:
             return self.startpage_follow_css

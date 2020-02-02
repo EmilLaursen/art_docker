@@ -6,6 +6,10 @@ volumes:
 
 networks:
   monitor-net:
+  
+secrets:
+  aws_creds:
+    external: true
 
 services:
 
@@ -74,6 +78,13 @@ services:
     build: # build is ignored by docker stack.
       context: ./artscraper/
       dockerfile: Dockerfile
+    secrets:
+      - source: aws_creds
+        target: /root/.aws/credentials
+        uid: '1000'
+        gid: '1000'
+        mode: 0700
+
     ports:
       - 6080:6080
       - 5666:5666
