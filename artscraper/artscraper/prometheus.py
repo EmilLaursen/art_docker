@@ -1,7 +1,7 @@
 import logging
 
 from prometheus_client.twisted import MetricsResource
-from prometheus_client import Counter, Summary, Gauge
+from prometheus_client import Gauge
 from twisted.web.server import Site
 from twisted.web import server, resource
 from twisted.internet import task
@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 prefix = "spr_"
 
 defaults = [
+    # List of default scrapy stats. May have missed some.
     "downloader/request_bytes",
     "downloader/request_count",
     "downloader/request_method_count/GET",
@@ -45,12 +46,14 @@ defaults = [
     "scheduler/enqueued",
     "scheduler/enqueued/memory",
 ]
+
+# Force defaults to conform to the prometheus datamodel.
 defaults = [re.sub(r"([^a-zA-Z0-9_:]+)", "_", d) for d in defaults]
 
 
 class WebService(Site):
     """
-
+        Service for exporting the internal scrapy stats to prometheus.
     """
 
     def __init__(self, crawler):
@@ -60,7 +63,6 @@ class WebService(Site):
         self.tasks = []
         self.stats = crawler.stats
         self.name = crawler.settings.get("BOT_NAME")
-        print(f"{dir(crawler)}")
         self.port = crawler.settings.get("PROMETHEUS_PORT", [9410])
         self.host = crawler.settings.get("PROMETHEUS_HOST", "0.0.0.0")
         self.path = crawler.settings.get("PROMETHEUS_PATH", "metrics")
@@ -105,7 +107,6 @@ class WebService(Site):
         for tsk in self.tasks:
             if tsk.running:
                 tsk.stop()
-
         # Stop metrics exporting
         self.promtheus.stopListening()
 
@@ -129,8 +130,11 @@ class WebService(Site):
                         prefix + field
                     )
                 )
+
             gauge = self.seen_stats.get(field)
             if not gauge:
+                # Gauge not initiated yet.
                 gauge = Gauge(prefix + field, "", ["spider"])
+            # Update prometheus gauge with scrapy stat.
             gauge.labels(spider=self.name).set(stat)
             self.seen_stats[field] = gauge

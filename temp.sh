@@ -1,0 +1,1 @@
+/usr/bin/vcgencmd measure_temp | awk -F"=" '{print $2}' | awk -F"'" '{print "node_cpu_temperature " $1}' > /node_exporter/textfile_collector/cpu_temp.prom.$$ && mv /node_exporter/textfile_collector/cpu_temp.prom.$$ /node_exporter/textfile_collector/cpu_temp.prom

@@ -98,4 +98,3 @@ class ArbejderenFrontpage(NewssiteFrontpageSpider):
         elif response.url in self.startpage_links:
             return self.startpage_follow_css
         return self.article_follow_css
-

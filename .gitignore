@@ -13,3 +13,4 @@ artscraper/data/arbejderen
 *.seen
 *.state
 notebooks/
+.metrics/

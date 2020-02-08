@@ -7,13 +7,15 @@ build:
 	#docker volume ls -qf dangling=true | xargs -r docker volume rm
 	#docker ps --filter status=dead --filter status=exited -aq | xargs -r docker rm -v
 	# Or docker system prune --force. But this seems to mess with running containers.
-	git pull
-	docker build -f $(HOME)/repos/art_docker/artscraper/fastapi-dockerfile -t emillime/artscraper:latest $(HOME)/repos/art_docker/artscraper
-	docker login
-	docker push emillime/artscraper:latest
+	docker build -f $(pwd)/art_docker/artscraper/fastapi-dockerfile -t emillime/artscraper:latest $(pwd)/art_docker/artscraper
 run:
 	docker stack rm prom
 	HOSTNAME=$(hostname) docker stack deploy -c docker-stack.yml prom
+pull:
+	git pull
+push:
+	docker login
+	docker push emillime/artscraper:latest
 full:
 	make build
 	make run

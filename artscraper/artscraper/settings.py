@@ -94,20 +94,18 @@ AUTOTHROTTLE_DEBUG = False
 DEPTH_STATS_VERBOSE = True
 
 # LOGGING
-LOG_FILE = (
-    "data/logs/overwrite_name.log"
-)  # this nameing trick does not work here! Overwrite in spider
+LOG_FILE = "data/logs/overwrite_name.log"  # this nameing trick does not work here! Overwrite in spider
 LOG_LEVEL = "INFO"
 LOG_FORMATTER = (
-    "artscraper.pipelines.PoliteLogFormatter"
-)  # Custom DropItem log handling.
+    "artscraper.pipelines.PoliteLogFormatter"  # Custom DropItem log handling.
+)
 
 # Visited BloomFilter
 VISITED_FILTER_MAX_ELEMENTS = 4000000
 VISITED_FILTER_EROOR_RATE = 1e-9
 VISITED_FILTER_PATH = (
-    "data/%(name)s.filter"
-)  # this nameing trick does not work here! Overwrite in spider
+    "data/%(name)s.filter"  # this nameing trick does not work here! Overwrite in spider
+)
 # Urls which will never be cached.
 NEVER_CACHE = []
 
@@ -125,7 +123,7 @@ PROMETHEUS_PATH = "metrics"
 PROMETHEUS_UPDATE_INTERVAL = 20
 
 # FEED EXPORTER
-#FEED_URI = Path.cwd().as_uri() + "/data/%(name)s.jl"
+# FEED_URI = Path.cwd().as_uri() + "/data/%(name)s.jsonl"
 FEED_FORMAT = "jsonlines"
 FEED_URI = "s3://dk-new-scrape/%(name)s/%(time)s.jsonl"
 

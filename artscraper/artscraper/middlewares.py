@@ -11,6 +11,8 @@ from bloom_filter import BloomFilter
 import logging
 from urllib.parse import urlparse
 
+logger = logging.getLogger(__name__)
+
 
 class ArtscraperSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -58,9 +60,6 @@ class ArtscraperSpiderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s" % spider.name)
-
-
-logger = logging.getLogger(__name__)
 
 
 class VisitedFilter(object):
