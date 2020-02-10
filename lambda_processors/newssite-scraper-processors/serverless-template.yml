@@ -1,0 +1,88 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: newssite-scraper-processors
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: python3.7
+
+# you can overwrite defaults here
+  stage: dev
+  region: eu-central-1
+  tags:
+    owner: scrapeMaster
+    project: Myproject
+
+# you can add statements to the Lambda function's IAM Role here
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+      Resource:
+          - "arn:aws:s3:::mybucket"
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+        - "s3:GetObject"
+        - "s3:ListObject"
+        - "s3:DeleteObject"
+      Resource:
+          - "arn:aws:s3:::mybucket/arbejderen_frontpage/*"
+          - "arn:aws:s3:::mybucket/bt_frontpage/*"
+          - "arn:aws:s3:::mybucket/finans_frontpage/*"
+          - "arn:aws:s3:::mybucket/dr_frontpage/*"
+          - "arn:aws:s3:::mybucket/kristeligt_frontpage/*"
+
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+# you can add packaging information here
+package:
+#  include:
+  exclude:
+    - package.json
+    - package-lock.json
+    - tmp/**
+
+functions:
+  hello:
+    handler: handler.hello
+    name: data_zipper
+    description: Downloads and zips a week worth of scraped data on S3.
+    memorySize: 128
+    timeout: 20
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    Check the event documentation for details
+    events:
+      - schedule:
+          rate: cron(0 15 ? * FRI *)
+          enabled: true
+        # 15pm every friday.
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    slim: true

@@ -23,7 +23,7 @@ Nothing fancy. Just consult makefile. Just build the scraper image with appropri
 A rudimentary web API has been written to orchestrate the different spiders. It should block you from running more than one spider at a time.
 Swagger documentation is available at
 ```IP-TO-HOST:5666/docs```
-To launch a scraper you can hit ```curl -XGET IP-TO-HOST:5666/start/SCRAPER_NAME ```.
+To launch a scraper you can hit ```curl -XGET IP-TO-HOST:5666/start/SPIDER_NAME ```, and stop a running spider with ```curl -XGET IP-TO-HOST:5666/stop ```.
 
 # Extending the NewssiteFrontpageSpider class
 Depending on the site, it should be easy to extend the generic spider class, to support novel news sites.
