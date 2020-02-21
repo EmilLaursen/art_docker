@@ -38,23 +38,6 @@ async def ps():
     return {"processes": res}
 
 
-@app.get("/test")
-async def test():
-
-    ls = subprocess.Popen("ls", stdout=subprocess.PIPE, shell=True)
-    pwd = subprocess.Popen("pwd", stdout=subprocess.PIPE, shell=True)
-
-    ls = str(ls.stdout.read(30).decode("utf-8"))
-    pwd = str(pwd.stdout.read(30).decode("utf-8"))
-
-    du = subprocess.Popen("ping 192.168.0.10", stdout=subprocess.PIPE, shell=True)
-    du1 = str(du.stdout.read(200).decode("utf-8"))
-    du.send_signal(subprocess.signal.SIGINT)
-    du2 = str(du.stdout.read(200).decode("utf-8"))
-
-    return {"ls": ls, "pwd": pwd, "du": du1, "stop": du2}
-
-
 class Singleton(type):
     _instances = {}
 

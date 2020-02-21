@@ -1,6 +1,5 @@
 # Always available in Lambda runtime.
 import boto3
-
 # Native deps
 import json
 from datetime import datetime
@@ -9,14 +8,11 @@ import zipfile
 from pathlib import Path
 from typing import List
 from itertools import chain
-
 # Non-native deps
 from jq import jq
-
 # Application imports
 from jq_scripts import NON_EMPTY_FILEKEYS, EMPTY_FILEKEYS, DELETE_FILTER
-
-# TODO: Change this for lambda production.
+# On in AWS lambda runtime you can only write to the /tmp/ dir. 500mb max.
 TEMP_DIR = Path("/tmp/")
 TEMP_DIR.mkdir(parents=True, exist_ok=True)
 

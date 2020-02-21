@@ -18,7 +18,7 @@ The repo contains some custom Prometheus exporters.
 
 # How to use it
 
-Nothing fancy. Just consult makefile. Just build the scraper image with appropriate tags, then deploy the docker-stack.yml.
+Consult makefile: Build the scraper image with appropriate tags, then deploy the docker-stack.yml.
 
 A rudimentary web API has been written to orchestrate the different spiders. It should block you from running more than one spider at a time.
 Swagger documentation is available at
@@ -39,22 +39,13 @@ where ```(pred(response)```( is a predicate which decides if custom logic is nee
 # TODO
 
 - [*] Upload scraped data to S3 directly.
-- [] Use AWS Lambda to zip the scraped .jsonl files every week.
+- [*] Use AWS Lambda to zip the scraped .jsonl files every week.
 - [*] crawl_master needs a lot of work.
 - [*] Refactor all spiders to a common base class.
 - [] Bring all scraped data to a common format, and resave to S3.
-- [*] Recalculate bloom filters (messed up the Berlingske filter.)
 - [] Document VisitedFilter middleware.
 - [] Document Prometheus exporter middleware.
 - [*] Figure out how to operate on a full list of fields, and each scraped field (Scrapy Itemloader docs). Use this to apply TakeFirst, and remove dupes where appropriate.
 - [*] Use w3lib to remove tags. Compare speed with html2text.
-- [] Use Scrapyd to orchestrate spiders. Need to eggify spiders.
-- [] Data duplicate detection. Several Ritzau articles on all sites.
-- [] Use AWS Lambda to calculate daily stats about scraped data. Either make a weekly report or push to influx DB or Prometheus for Grafana integration.
-
-
-
-# Custom middleware
-
-- persisting request dupe filter using a bloom filter.
-- Prometheus exporter.
+- [] Content duplicate detection. Several Ritzau articles on all sites.
+- [] Use AWS Lambda to calculate streaming stats about scraped data. Either make a weekly report or use pushgateway to Prometheus for Grafana integration.
