@@ -92,9 +92,10 @@ services:
       - "./data:/artscraper/data"
     networks:
       - monitor-net
+    restart: always
     deploy:
       restart_policy:
-        condition: none
+        condition: always
 
   cadvisor:
     image: budry/cadvisor-arm:0.30.2
