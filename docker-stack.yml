@@ -84,7 +84,6 @@ services:
         uid: '1000'
         gid: '1000'
         mode: 0700
-
     ports:
       - 6080:6080
       - 5666:5666
@@ -94,8 +93,7 @@ services:
       - monitor-net
     restart: always
     deploy:
-      restart_policy:
-        condition: always
+      mode: global
 
   cadvisor:
     image: budry/cadvisor-arm:0.30.2

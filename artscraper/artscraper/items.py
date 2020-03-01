@@ -47,7 +47,7 @@ month_map = {
 
 DATE_REGEXES = {
     "BT_DATE_REGEX": re.compile(r"d. (\d+). (\w+) (\d{4}), kl. (\d+).(\d+)"),
-    "DR_DATE_REGEX": re.compile(r"(\d{2}). (\w+). (\d{4}) kl. (\d{2}).(\d{2})"),
+    "DR_DATE_REGEX": re.compile(r"(\d{2}). (\w+).? (\d{4}) kl. (\d{2}).(\d{2})"),
     "FINANS_DATE_REGEX": re.compile(r"(\d{2}).(\d{2}).(\d{4}) kl. (\d{2}).(\d{2})"),
     "KRISTELIGT_DATE_REGEX": re.compile(
         r"(\d{1,2}). (\w+) (\d{4}), kl. (\d{1,2}).(\d{2})"
@@ -80,7 +80,8 @@ def extract_datetime(date_string):
     for n, regex in DATE_REGEXES.items():
         match = re.search(regex, date_string)
         if match:
-            return datetime(*parse_date_match(match, [month_map, short_month_map]))
+            date_args = parse_date_match(match, [month_map, short_month_map])
+            return datetime(*date_args)
 
     return date_string
 
