@@ -7,6 +7,12 @@ def _get_section(url):
     section = splitpath[1] if len(splitpath) >= 1 else None
     return unquote(section)
 
+def always(x):
+    return True
+
+def section_loader(itemloader, response):
+    itemloader.add_value("section", _get_section(response.url))
+    return itemloader
 
 def is_debatindlaeg_url(response):
     return (
@@ -48,7 +54,7 @@ default_selectors = {
     "body_css": "#new_recommendation+ .article p",
     "section_css": ".artSec::text",
     "startpage_links": startpage_links,
-    "predicate_loader_pairs": [(is_debatindlaeg_url, debatindlaeg_loader)],
+    "predicate_loader_pairs": [(is_debatindlaeg_url, debatindlaeg_loader), (always, section_loader)],
 }
 
 
