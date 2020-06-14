@@ -38,6 +38,7 @@ where ```(pred(response)```( is a predicate which decides if custom logic is nee
 
 # TODO
 
+- [] Add scraped field counter to each run, and log this.. Just note if field is found/empty/None.
 - [*] Upload scraped data to S3 directly.
 - [*] Use AWS Lambda to zip the scraped .jsonl files every week.
 - [*] crawl_master needs a lot of work.
