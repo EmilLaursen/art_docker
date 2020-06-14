@@ -4,7 +4,7 @@ import plac
 
 
 spiders = "finans_frontpage arbejderen_frontpage dr_frontpage kristeligt_frontpage bt_frontpage".split()
-endpoint = "http://192.168.0.10:5666/start/"
+endpoint = "http://0.0.0.0:5666/start/"
 
 
 def main(spider: (f"The spider to run. Must be one of {spiders}", "option", "run")):
@@ -16,3 +16,4 @@ def main(spider: (f"The spider to run. Must be one of {spiders}", "option", "run
 
 if __name__ == "__main__":
     plac.call(main)
+
