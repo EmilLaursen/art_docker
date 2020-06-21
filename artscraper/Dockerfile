@@ -2,7 +2,9 @@ FROM python:3.7-alpine
 
 COPY requirements.txt .
 
-RUN apk add --no-cache make python3-dev gcc musl-dev openssl-dev libxml2-dev libxslt-dev libffi-dev libxml2 libxslt \
+# you should document which build-deps are for which libs..
+
+RUN apk add --no-cache make sqlite python3-dev gcc musl-dev openssl-dev libxml2-dev libxslt-dev libffi-dev libxml2 libxslt \
     && pip3 install --upgrade pip \
     && pip3 install --no-cache-dir -r requirements.txt \
     && apk del make python3-dev gcc musl-dev openssl-dev libxml2-dev libxslt-dev libffi-dev

@@ -19,7 +19,6 @@ lxml==4.5.1
 parsel==1.6.0
 prometheus-client==0.7.1
 protego==0.1.16
-psutil==5.7.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.20
@@ -35,7 +34,7 @@ service-identity==18.1.0
 six==1.15.0
 starlette==0.12.9
 twisted==20.3.0; python_version >= "3.5"
-urllib3==1.25.9
+urllib3==1.25.9; python_version != "3.4"
 uvicorn==0.11.5
 uvloop==0.14.0
 w3lib==1.22.0

@@ -66,7 +66,10 @@ EXTENSIONS = {
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {"artscraper.pipelines.ArtscraperPipeline": 300}
+ITEM_PIPELINES = {
+    "artscraper.pipelines.ContentHash": 500,
+    "artscraper.pipelines.ScrapeStatsPersistancePipeline": 800,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -93,6 +96,8 @@ AUTOTHROTTLE_DEBUG = False
 
 DEPTH_STATS_VERBOSE = True
 
+# MISSING STATS DB FILE
+MISSING_STATS_DB_FILE = "data/missing_stats.db"
 # LOGGING
 LOG_FILE = "data/logs/overwrite_name.log"  # this nameing trick does not work here! Overwrite in spider
 LOG_LEVEL = "INFO"
@@ -131,7 +136,7 @@ minute = 60
 hour = minute * 60
 
 # STOPPING CONDITION
-CLOSESPIDER_TIMEOUT = hour * 5  # seconds. This is 1 hours.
+CLOSESPIDER_TIMEOUT = hour * 5
 CLOSESPIDER_ITEMCOUNT = 11111
 CLOSESPIDER_PAGECOUNT = 0
 CLOSESPIDER_ERRORCOUNT = 0

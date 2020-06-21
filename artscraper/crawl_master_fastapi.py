@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from enum import Enum
 import subprocess
-import psutil
 
 
 app = FastAPI()
@@ -24,18 +23,6 @@ async def launch_spider(spider: Spider):
 async def stop():
     return ScrapyProcess().stop()
 
-
-@app.get("/ps")
-async def ps():
-    res = []
-    for proc in psutil.process_iter():
-        try:
-            pinfo = proc.as_dict(attrs=["pid", "name", "username"])
-            res.append(pinfo)
-        except psutil.NoSuchProcess:
-            pass
-
-    return {"processes": res}
 
 
 class Singleton(type):

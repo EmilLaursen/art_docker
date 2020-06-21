@@ -4,15 +4,20 @@ from artscraper.spiders.generic_news_spider import NewssiteFrontpageSpider
 
 def _get_section(url):
     splitpath = urlsplit(url).path.split(sep="/")
-    section = splitpath[1] if len(splitpath) >= 1 else None
+    if len(splitpath) <= 1:
+        return None
+    section = splitpath[1]
     return unquote(section)
+
 
 def always(x):
     return True
 
+
 def section_loader(itemloader, response):
     itemloader.add_value("section", _get_section(response.url))
     return itemloader
+
 
 def is_debatindlaeg_url(response):
     return (
@@ -32,7 +37,7 @@ startpage_links = [
     "https://www.kristeligt-dagblad.dk/bagsiden/",
     "https://www.kristeligt-dagblad.dk/udland/",
     "https://www.kristeligt-dagblad.dk/danmark/",
-    "https://www.kristeligt-dagblad.dk/liv-sjael/",
+    "https://www.kristeligt-dagblad.dk/liv-sjael/",  # this is now just /liv.
     "https://www.kristeligt-dagblad.dk/kronik/",
     "https://www.kristeligt-dagblad.dk/kirke",
     "https://www.kristeligt-dagblad.dk/kultur",
@@ -47,14 +52,17 @@ default_selectors = {
     "startpage_follow_css": ".heading+ .column a::attr(href) , .related a::attr(href) , .heading a::attr(href)",
     "article_follow_css": ".link::attr(href)",
     "paywall_css": ".paid",
-    "authors_css": ".byline a::text",
+    "authors_css": ".byline::text",
     "date_css": ".publication::text",
     "title_css": "#new_recommendation+ .article h1::text",
     "sub_title_css": ".lead::text",
     "body_css": "#new_recommendation+ .article p",
     "section_css": ".artSec::text",
     "startpage_links": startpage_links,
-    "predicate_loader_pairs": [(is_debatindlaeg_url, debatindlaeg_loader), (always, section_loader)],
+    "predicate_loader_pairs": [
+        (is_debatindlaeg_url, debatindlaeg_loader),
+        (always, section_loader),
+    ],
 }
 
 

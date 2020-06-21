@@ -109,6 +109,8 @@ class ArtscraperItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
 
+    uid = Field()
+
     authors = Field(
         input_processor=MapCompose(w3lib.html.remove_tags, str.strip, filter_empty)
     )
