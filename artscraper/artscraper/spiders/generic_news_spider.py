@@ -2,7 +2,9 @@ import scrapy
 from artscraper.items import ArtscraperItem
 from scrapy.loader import ItemLoader
 from datetime import datetime
+import logging
 
+logger = logging.getLogger(__name__)
 
 class NewssiteFrontpageSpider(scrapy.Spider):
     name = "empty_newssite_spider"
