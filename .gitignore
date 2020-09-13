@@ -12,7 +12,6 @@ artscraper/data/arbejderen
 *.gz
 *.seen
 *.state
-notebooks/
 .metrics/
 
 # Distribution / packaging
