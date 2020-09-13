@@ -11,7 +11,7 @@ class NewssiteFrontpageSpider(scrapy.Spider):
         super(NewssiteFrontpageSpider, self).__init__(*args, **kwargs)
 
         # Subclass specific settings should be passed along in this key.
-        cfg = kwargs.get("newssite", "Failure")
+        cfg = kwargs.get("newssite")
 
         if cfg:
             self.startpage_links = cfg.get("startpage_links")
@@ -26,11 +26,14 @@ class NewssiteFrontpageSpider(scrapy.Spider):
             self.body_css = cfg.get("body_css")
             self.section_css = cfg.get("section")
             self.predicate_loader_pairs = cfg.get("predicate_loader_pairs", [])
+        else:
+            raise NotImplementedError(f"newssite config not found")
 
     def start_requests(self):
         for url in self.startpage_links:
+            logger.info(f"Parsing startpage link: {url}")
             yield scrapy.Request(
-                # The "dont_cache" ise used by job persistence middleware
+                # The "dont_cache" is used by job persistence middleware
                 url=url,
                 callback=self.parse_startpage,
                 meta={"dont_cache": True},
@@ -39,7 +42,10 @@ class NewssiteFrontpageSpider(scrapy.Spider):
     def parse_startpage(self, response):
         follow_css = self.choose_follow_css(response)
 
-        for next_page in response.css(follow_css).getall():
+        next_pages = response.css(follow_css).getall()
+        logger.info(f"Parsing startpage: {response}, found links: {len(next_pages)}")
+
+        for next_page in next_pages:
             if next_page is not None:
                 yield response.follow(next_page, callback=self.parse)
 
@@ -66,7 +72,7 @@ class NewssiteFrontpageSpider(scrapy.Spider):
         return loader
 
     def parse(self, response):
-        print(response)
+        logger.info(response)
         # Prepare default item parse logic
         loader = self.default_itemloader(response)
 
@@ -84,6 +90,8 @@ class NewssiteFrontpageSpider(scrapy.Spider):
 
         follow_css = self.choose_follow_css(response)
         if follow_css:
-            for next_page in response.css(follow_css).getall():
+            next_pages = response.css(follow_css).getall()
+            logger.info(f"Parsing article page: {response}, Found links {len(next_pages)}")
+            for next_page in next_pages:
                 if next_page is not None:
                     yield response.follow(next_page, callback=self.parse)

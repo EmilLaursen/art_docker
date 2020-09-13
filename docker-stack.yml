@@ -96,7 +96,7 @@ services:
       mode: global
 
   cadvisor:
-    image: budry/cadvisor-arm:0.30.2
+    image: emilime/cadvisor:arm64-0.36.0
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw

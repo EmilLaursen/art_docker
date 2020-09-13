@@ -6,6 +6,20 @@ This is a small Scrapy app, for scraping new articles off of the front pages of 
 
 The app is deployed with docker swarm. This stack is based on the wonderful work of [vegasbrianc/prometheus](https://github.com/vegasbrianc/prometheus) and consists of Prometheus, Node Exporter, Grafana, cAdvisor, and Alertmanager for monitoring the containers. Note that the cAdvisor image used, is for ARM. If you wish to deploy this on a non-arm architecture, you should change this image to Google's official cAdvisor image.
 
+### Deploying
+
+0) **ARM only**: Build caadvisor image corresponding to your arch. Check ```uname -m```. For arm64v8 (aarch64) you run
+```
+docker build -t emilime/cadvisor:arm64-v0.36.0 cadvisor_build/arm64
+```
+On armv7 (32bit) you run
+```
+docker build -t emilime/cadvisor:arm32v7-v0.36.0 cadvisor_build/arm32v7
+```
+and then change the image in the docker-stack.yml accordingly.
+1) Create aws credentials secret (needs docker swarm on host) ```docker secret create aws_creds $HOME/.aws/credentials```. This is needed to access the S3 bucket when uploading scraped data.
+2) 
+
 
 The repo contains some custom Prometheus exporters.
 1) A Scrapy Prometheus exporter (artscraper/prometheus.py), which publishes the internal spider stats to Prometheus. It is a slight modification of [this](https://github.com/rangertaha/scrapy-prometheus-exporter). It will publish all internal Scrapy stats in the Spider.stats.get_stats() dictionary, including stats added by your own custom middleware.
