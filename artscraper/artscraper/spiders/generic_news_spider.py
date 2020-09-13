@@ -33,7 +33,6 @@ class NewssiteFrontpageSpider(scrapy.Spider):
 
     def start_requests(self):
         for url in self.startpage_links:
-            logger.info(f"Parsing startpage link: {url}")
             yield scrapy.Request(
                 # The "dont_cache" is used by job persistence middleware
                 url=url,
@@ -74,7 +73,6 @@ class NewssiteFrontpageSpider(scrapy.Spider):
         return loader
 
     def parse(self, response):
-        logger.info(response)
         # Prepare default item parse logic
         loader = self.default_itemloader(response)
 
@@ -97,3 +95,5 @@ class NewssiteFrontpageSpider(scrapy.Spider):
             for next_page in next_pages:
                 if next_page is not None:
                     yield response.follow(next_page, callback=self.parse)
+        else:
+            logger.info(f"Parsing article page: {response}")

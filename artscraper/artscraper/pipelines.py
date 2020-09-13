@@ -148,6 +148,10 @@ class ContentHash:
         hash_func = hashlib.blake2b(digest_size=four_bytes)
         body = item.get("body")
 
+        if body is None:
+            logger.critical(f"Spider: {spider} got body of NoneType from item: {item}")
+            return item
+
         prefix = f"{spider.name[:5]}^{get_date(item)}^"
 
         if type(body) == list:
