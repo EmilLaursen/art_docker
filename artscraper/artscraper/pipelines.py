@@ -19,8 +19,6 @@ from typing import Iterator, Optional, List
 from scrapy.exceptions import DropItem
 from scrapy import logformatter
 
-# import datasketch
-
 logger = logging.getLogger(__name__)
 
 
@@ -149,7 +147,7 @@ class ContentHash:
         body = item.get("body")
 
         if body is None:
-            logger.critical(f"Spider: {spider} got body of NoneType from item: {item}")
+            logger.critical(f"Spider: {spider} got body of NoneType from url: {item.get('url')}")
             return item
 
         prefix = f"{spider.name[:5]}^{get_date(item)}^"

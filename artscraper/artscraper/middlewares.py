@@ -73,6 +73,8 @@ class VisitedFilter(object):
         )
         self.never_cache.add(urlparse("/robots.txt").path)
 
+        logger.info(f"Initiating bloom filter....")
+
         self.visited = BloomFilter(
             max_elements=settings.getint("VISITED_FILTER_MAX_REQUESTS", 4000000),
             error_rate=settings.getfloat("VISITED_FILTER_ERROR_RATE", 1e-9),
@@ -90,6 +92,7 @@ class VisitedFilter(object):
         filter_path = crawler.settings.get("VISITED_FILTER_PATH", None)
 
         if not filter_path:
+            logger.critical(f"VisitedFilter filter_path not configured !!")
             raise NotConfigured
         s = cls(crawler.settings, crawler.stats)
         crawler.signals.connect(s.spider_closed, signal=signals.spider_closed)
