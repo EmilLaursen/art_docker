@@ -10,8 +10,7 @@ build:
 	docker build -f $$(pwd)/artscraper/Dockerfile -t emillime/artscraper:latest $$(pwd)/artscraper
 run:
 	docker stack rm prom
-	echo "Sleeping for 30s"
-	sleep 30
+	sleep 7
 	echo "Waking up!"
 	HOSTNAME=$$(hostname) docker stack deploy -c docker-stack.yml prom
 pull:
