@@ -45,6 +45,10 @@ startpage_links = [
     "https://www.kristeligt-dagblad.dk/debat",
     "https://www.kristeligt-dagblad.dk/om",
     "https://www.kristeligt-dagblad.dk/genforeningen",
+    "https://www.kristeligt-dagblad.dk/tidslys",
+    "https://www.kristeligt-dagblad.dk/uortodoks",
+    "https://www.kristeligt-dagblad.dk/det-syngende-menneske",
+    "https://www.kristeligt-dagblad.dk/trumps-unge-kernevaelgere",
 ]
 
 

@@ -73,7 +73,7 @@ class VisitedFilter(object):
         )
         self.never_cache.add(urlparse("/robots.txt").path)
 
-        logger.info(f"Initiating bloom filter....")
+        logger.info(f"Initiating bloom filter.... Never Cache paths: {sorted(self.never_cache)}")
 
         self.visited = BloomFilter(
             max_elements=settings.getint("VISITED_FILTER_MAX_REQUESTS", 4000000),
