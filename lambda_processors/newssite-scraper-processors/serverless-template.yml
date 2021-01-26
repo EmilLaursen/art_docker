@@ -23,6 +23,7 @@ service: newssite-scraper-processors
 provider:
   name: aws
   runtime: python3.7
+  timeout: 60
 
 # you can overwrite defaults here
   stage: dev
@@ -69,8 +70,8 @@ functions:
     handler: handler.hello
     name: data_zipper
     description: Downloads and zips a week worth of scraped data on S3.
-    memorySize: 128
-    timeout: 20
+    memorySize: 192
+    timeout: 60
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

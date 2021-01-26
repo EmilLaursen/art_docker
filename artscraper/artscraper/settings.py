@@ -107,7 +107,7 @@ LOG_FORMATTER = (
 
 # Visited BloomFilter
 VISITED_FILTER_MAX_ELEMENTS = 4000000
-VISITED_FILTER_EROOR_RATE = 1e-9
+VISITED_FILTER_ERROR_RATE = 1e-9
 VISITED_FILTER_PATH = (
     "data/%(name)s.filter"  # this nameing trick does not work here! Overwrite in spider
 )
@@ -128,7 +128,7 @@ PROMETHEUS_PATH = "metrics"
 PROMETHEUS_UPDATE_INTERVAL = 20
 
 # FEED EXPORTER
-# FEED_URI = Path.cwd().as_uri() + "/data/%(name)s.jsonl"
+#FEED_URI = Path.cwd().as_uri() + "/data/%(name)s.jsonl"
 FEED_FORMAT = "jsonlines"
 FEED_URI = "s3://dk-new-scrape/%(name)s/%(time)s.jsonl"
 

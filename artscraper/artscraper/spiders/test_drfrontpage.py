@@ -23,7 +23,7 @@ default_selectors = {
     "date_css": ".dre-article-byline__date::text",
     "title_css": ".dre-article-title__title::text",
     "sub_title_css": ".dre-article-title__summary::text",
-    "body_css": ".dre-article-body p, .dre-article-body__fact-box-content p",
+    "body_css": ".dre-article-body p, .dre-article-body__fact-box-content p, .dre-article-body-paragraph",
     "section_css": ".dre-label-text--sm-large::text",
     "startpage_links": startpage_links,
     "predicate_loader_pairs": [],

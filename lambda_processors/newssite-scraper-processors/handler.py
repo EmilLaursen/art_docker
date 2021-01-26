@@ -27,6 +27,8 @@ scraper_dirs = [
     "kristeligt_frontpage",
 ]
 
+MB = 1000**2
+
 
 def hello(event, context):
 
@@ -91,7 +93,9 @@ def download_keys(keys: List[Path], output_dir: Path) -> List[Path]:
         with local_file.open("wb") as lfile:
             s3.download_fileobj(BUCKET_NAME, str(key), lfile)
 
-    print(f"Downloaded keys in {time.time() - start:.1f} secs: {keys}")
+    total_size = sum(f.stat().st_size for f in output_files) / MB
+
+    print(f"Downloaded keys in {time.time() - start:.1f} s, Total size: {total_size:.2f} MBs, Keys: {keys}")
     return output_files
 
 
